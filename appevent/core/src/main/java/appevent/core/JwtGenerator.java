@@ -2,6 +2,9 @@ package appevent.core;
 
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -20,6 +23,8 @@ public final class JwtGenerator {
      * The duration in milliseconds for which the token will be valid (30 minutes).
      */
     private static final long TOKEN_DURATION = 30 * 60 * 1000; 
+    private static final byte[] SECRET_KEY = "0123456789ABCDEF0123456789ABCDEF".getBytes(); //denne må vi endre etterhvert
+
     
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -43,12 +48,15 @@ public final class JwtGenerator {
                 .claim("userId", userId.toString())
                 .setIssuedAt(new Date(currentTime))
                 .setExpiration(new Date(currentTime + TOKEN_DURATION))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
                 .compact();
     }
 
    public static boolean validateToken(String token) {
         try {
-            JwtParser parser = Jwts.parserBuilder().build();
+            JwtParser parser = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
+                    .build();
             parser.parseClaimsJws(token);
             return true;
         } catch (Exception e) {

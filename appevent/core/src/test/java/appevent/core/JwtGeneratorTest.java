@@ -9,8 +9,7 @@ class JwtGeneratorTest {
 
     @Test
     void testGenerateTokenAndValidate() {
-        UUID userId = UUID.randomUUID();
-        String token = JwtGenerator.generateToken("testUser", userId);
+        String token = JwtGenerator.generateToken("testUser", UUID.randomUUID());
         assertTrue(JwtGenerator.validateToken(token));
     }
 
