@@ -1,21 +1,14 @@
 package appevent.dto;
 
 /**
- * Data Transfer Object for authentication.
+ * Record representing authentication data transfer object (DTO).
+ *
+ * @param username the username of the user
+ * @param password the password of the user
+ * @param confirmPassword the confirmation of the password
  */
 public record AuthDTO(
-    /**
-     * The username of the user.
-     */
     String username,
-
-    /**
-     * The password of the user.
-     */
     String password,
-
-    /**
-     * The confirmation of the password.
-     */
     String confirmPassword
-) {}
+) { }

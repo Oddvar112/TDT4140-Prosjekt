@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"appevent.core", "appevent.server", "appevent.dto", "appevent.model"})
-@EntityScan("appevent.model")  
+@EntityScan("appevent.model")
 @EnableJpaRepositories("appevent.model")
 public class ServerApplication {
 
@@ -21,7 +21,7 @@ public class ServerApplication {
      *
      * @param args command-line arguments passed to the application
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(ServerApplication.class, args);
     }
 }

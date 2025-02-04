@@ -24,7 +24,7 @@ public class AuthController {
      *
      * @param authService the authentication service to be used by this controller
      */
-    public AuthController(AuthService authService) {
+    public AuthController(final AuthService authService) {
         this.authService = authService;
     }
 

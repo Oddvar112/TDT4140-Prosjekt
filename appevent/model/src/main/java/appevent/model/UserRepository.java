@@ -8,10 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-    
+
     /**
-     * Finds a user by their username
-     * 
+     * Finds a user by their username.
      * @param usernavn the username to search for
      * @return Optional containing the user if found
      */

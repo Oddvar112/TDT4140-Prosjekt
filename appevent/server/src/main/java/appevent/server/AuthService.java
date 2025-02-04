@@ -19,10 +19,10 @@ import appevent.model.UserRepository;
  */
 @Service
 public class AuthService {
-    
+
     private final UserRepository userRepository;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -37,14 +37,14 @@ public class AuthService {
      */
     public String login(final AuthDTO authDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
         validateCredentials(authDTO.username(), authDTO.password());
-        
+
         User user = userRepository.findByBrukernavn(authDTO.username())
             .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
-            
+
         if (PasswordHasher.verifyPassword(authDTO.password(), user.getPassord())) {
             return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
         }
-        
+
         throw new IllegalArgumentException("Feil passord");
     }
 

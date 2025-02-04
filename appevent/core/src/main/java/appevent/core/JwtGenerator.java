@@ -18,14 +18,14 @@ import java.util.UUID;
  * @since 1.0
  */
 public final class JwtGenerator {
-    
+
     /**
      * The duration in milliseconds for which the token will be valid (30 minutes).
      */
-    private static final long TOKEN_DURATION = 30 * 60 * 1000; 
+    private static final long TOKEN_DURATION = 30 * 60 * 1000;
     private static final byte[] SECRET_KEY = "0123456789ABCDEF0123456789ABCDEF".getBytes(); //denne må vi endre etterhvert
 
-    
+
     /**
      * Private constructor to prevent instantiation of this utility class.
      *
@@ -34,25 +34,28 @@ public final class JwtGenerator {
     private JwtGenerator() {
         throw new UnsupportedOperationException("Utility class");
     }
-    
+
     /**
-     * Generates a basic JWT token with a expiration time.
-     * The token is generated without signature, claims, or subject.
-     * It only contains the issued at time (iat) and expiration time (exp).
-     * @return a String representing the JWT token
-     */
-    public static String generateToken(String brukernavn, UUID userId) {
+    * Generates a basic JWT token with an expiration time.
+    * The token is generated with a subject and userId claim.
+     * It contains the issued at time (iat) and expiration time (exp).
+    *
+    * @param brukernavn the username of the user
+    * @param userId the unique identifier of the user
+    * @return a String representing the JWT token
+    */
+    public static String generateToken(final String brukernavn, final UUID userId) {
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
-                .setSubject(brukernavn)
-                .claim("userId", userId.toString())
-                .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(currentTime + TOKEN_DURATION))
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
-                .compact();
+            .setSubject(brukernavn)
+            .claim("userId", userId.toString())
+            .setIssuedAt(new Date(currentTime))
+            .setExpiration(new Date(currentTime + TOKEN_DURATION))
+            .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
+            .compact();
     }
 
-   public static boolean validateToken(String token) {
+   public static boolean validateToken(final String token) {
         try {
             JwtParser parser = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
