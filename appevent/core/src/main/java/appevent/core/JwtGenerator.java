@@ -66,4 +66,21 @@ public final class JwtGenerator {
             return false;
         }
     }
+    public static String getUserIdFromToken(final String token) {
+        try {
+            String actualToken = token;
+            if (token.startsWith("Bearer ")) {
+                actualToken = token.substring(7);
+            }
+            JwtParser parser = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
+                    .build();
+            return parser.parseClaimsJws(actualToken)
+                    .getBody()
+                    .get("userId", String.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Kunne ikke hente bruker-ID fra token", e);
+        }
+}
+
 }

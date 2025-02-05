@@ -1,8 +1,10 @@
 package appevent.server;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import appevent.dto.AuthDTO;
+import appevent.dto.AuthDTORegistration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,7 @@ public class AuthController {
      *
      * @param authService the authentication service to be used by this controller
      */
+    @Autowired
     public AuthController(final AuthService authService) {
         this.authService = authService;
     }
@@ -52,14 +55,14 @@ public class AuthController {
     /**
      * Handles user registration requests.
      *
-     * @param authDTO the authentication data transfer object containing registration details
+     * @param authDTORegistration the authentication data transfer object containing registration details
      * @return a ResponseEntity containing the authentication token if registration is successful,
      *         or an error message if registration fails
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody final AuthDTO authDTO) {
+    public ResponseEntity<?> register(@RequestBody final AuthDTORegistration authDTORegistration) {
         try {
-            String token = authService.register(authDTO);
+            String token = authService.register(authDTORegistration);
             return ResponseEntity.status(HttpStatus.CREATED).body(token);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
