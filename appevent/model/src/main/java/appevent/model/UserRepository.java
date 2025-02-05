@@ -16,4 +16,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      */
     Optional<User> findByBrukernavn(String usernavn);
 
+    /**
+     * Finds a user by their ID.
+     * @param id the ID to search for
+     * @return Optional containing the user if found
+     */
+    Optional<User> findById(UUID id);
+
 }

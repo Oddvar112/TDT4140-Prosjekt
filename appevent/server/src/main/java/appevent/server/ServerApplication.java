@@ -15,7 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("appevent.model")
 @EnableJpaRepositories("appevent.model")
 public class ServerApplication {
-
     /**
      * The main method which serves as the entry point for the Spring Boot application.
      *
