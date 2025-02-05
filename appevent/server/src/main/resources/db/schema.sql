@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS AppUser (
+    id BINARY(16) PRIMARY KEY,
+    brukernavn VARCHAR(50) UNIQUE NOT NULL,
+    passord VARCHAR(255) NOT NULL
+);
+
