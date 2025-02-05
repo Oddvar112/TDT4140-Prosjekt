@@ -21,13 +21,16 @@ public class User {
    @GeneratedValue(strategy = GenerationType.UUID)
    private UUID id;
 
+   @Column(nullable = false)
+   private boolean isAdmin;
+
    @Column(unique = true, nullable = false, length = 50)
    private String brukernavn;
 
    @Column(nullable = false)
    private String passord;
 
-   /**
+    /**
     * Default constructor for JPA.
     */
    protected User() { }
@@ -37,11 +40,13 @@ public class User {
     *
     * @param brukernavn the username of the user
     * @param passord the password of the user
+    * @param isAdmin whether the user is an administrator
     */
-   public User(final String brukernavn, final String passord) {
-       this.brukernavn = brukernavn;
-       this.passord = passord;
-   }
+    public User(final String brukernavn, final String passord, final boolean isAdmin) {
+        this.brukernavn = brukernavn;
+        this.passord = passord;
+        this.isAdmin = isAdmin;
+    }
 
    /**
     * Returns the unique identifier of the user.
@@ -52,21 +57,30 @@ public class User {
        return id;
    }
 
-   /**
+    /**
     * Returns the username of the user.
     *
     * @return the username of the user
     */
-   public String getBrukernavn() {
-       return brukernavn;
-   }
+    public String getBrukernavn() {
+        return brukernavn;
+    }
 
-   /**
-    * Returns the password of the user.
-    *
-    * @return the password of the user
-    */
-   public String getPassord() {
-       return passord;
-   }
+    /**
+     * Returns the password of the user.
+     *
+     * @return the password of the user
+     */
+    public String getPassord() {
+        return passord;
+    }
+
+    /**
+     * Returns whether the user is an administrator.
+     *
+     * @return true if the user is an administrator, false otherwise
+     */
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 }
