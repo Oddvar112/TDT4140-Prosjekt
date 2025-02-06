@@ -1,5 +1,7 @@
 package appevent.core;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -89,6 +91,18 @@ public final class JwtGenerator {
                     .build();
             parser.parseClaimsJws(token);
             return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean validateAdminToken(final String token) {
+        try {
+            JwtParser parser = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
+                    .build();
+            Jws<Claims> claims = parser.parseClaimsJws(token);
+            return claims.getBody().get("isAdmin", Boolean.class);
         } catch (Exception e) {
             return false;
         }
