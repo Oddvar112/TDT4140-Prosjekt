@@ -7,7 +7,7 @@ public class AuthDToTest {
 
     @Test
     public void testAuthDTOCreation() {
-        AuthDTO authDTO = new AuthDTO("user", "pass", "pass");
+        AuthDTORegistration authDTO = new AuthDTORegistration("user", "pass", "pass");
         assertEquals("user", authDTO.username());
         assertEquals("pass", authDTO.password());
         assertEquals("pass", authDTO.confirmPassword());
@@ -15,15 +15,15 @@ public class AuthDToTest {
 
     @Test
     public void testAuthDTOEquality() {
-        AuthDTO authDTO1 = new AuthDTO("user", "pass", "pass");
-        AuthDTO authDTO2 = new AuthDTO("user", "pass", "pass");
+        AuthDTORegistration authDTO1 = new AuthDTORegistration("user", "pass", "pass");
+        AuthDTORegistration authDTO2 = new AuthDTORegistration("user", "pass", "pass");
         assertEquals(authDTO1, authDTO2);
     }
 
     @Test
     public void testAuthDTONotEqual() {
-        AuthDTO authDTO1 = new AuthDTO("user1", "pass1", "pass1");
-        AuthDTO authDTO2 = new AuthDTO("user2", "pass2", "pass2");
+        AuthDTORegistration authDTO1 = new AuthDTORegistration("user1", "pass1", "pass1");
+        AuthDTORegistration authDTO2 = new AuthDTORegistration("user2", "pass2", "pass2");
         assertNotEquals(authDTO1, authDTO2);
     }
 }

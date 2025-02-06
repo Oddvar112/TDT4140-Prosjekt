@@ -5,8 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -14,11 +17,12 @@ import java.util.UUID;
  * Contains basic user authentication information.
  */
 @Entity
-@Table(name = "AppUser")
+@Table(name = "appuser")
 public class User {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.UUID)
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   @Column(columnDefinition = "BINARY(16)")
    private UUID id;
 
    @Column(nullable = false)
@@ -83,4 +87,7 @@ public class User {
     public boolean isAdmin() {
         return isAdmin;
     }
+
+   @ManyToMany(mappedBy = "participants")
+    private Set<Activity> activities = new HashSet<>();
 }
