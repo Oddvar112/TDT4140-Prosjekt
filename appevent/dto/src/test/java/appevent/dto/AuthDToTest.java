@@ -3,7 +3,7 @@ package appevent.dto;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AuthDToTest {
+public class AuthDTOTest {
 
     @Test
     public void testAuthDTOCreation() {
@@ -26,4 +26,12 @@ public class AuthDToTest {
         AuthDTORegistration authDTO2 = new AuthDTORegistration("user2", "pass2", "pass2");
         assertNotEquals(authDTO1, authDTO2);
     }
+
+    @Test
+    public void testAuthDTO() {
+        AuthDTO authDTO = new AuthDTO("user", "pass");
+        assertEquals("user", authDTO.username());
+        assertEquals("pass", authDTO.password());
+    }
+
 }

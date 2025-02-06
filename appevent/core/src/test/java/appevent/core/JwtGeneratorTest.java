@@ -23,4 +23,16 @@ class JwtGeneratorTest {
     void testInvalidToken() {
         assertFalse(JwtGenerator.validateToken("invalid.token.value"));
     }
+
+    @Test
+    void testGetAdminIdFromToken() {
+        UUID id = UUID.randomUUID();
+        String token = JwtGenerator.generateAdminToken("testAdmin", id);
+        assertEquals(String.valueOf(id), JwtGenerator.getAdminIdFromToken(token));
+    }
+
+    @Test
+    void testGeIdFromInvalidToken() {
+        assertThrows(Exception.class, () -> JwtGenerator.getAdminIdFromToken("invalid.token.value"));
+    }
 }

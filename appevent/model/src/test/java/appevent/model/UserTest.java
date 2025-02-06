@@ -6,12 +6,11 @@ public class UserTest {
 
     @Test
     void testConstructorAndGetters() {
-        User user = new User("testUser", "secret", false);
+        User user = new User("testUser", "secret");
         assertEquals("testUser", user.getBrukernavn());
         assertEquals("secret", user.getPassord());
         // ID er som regel null før persistering
         assertNull(user.getId());
-        assertFalse(user.isAdmin());
     }
 
     @Test
@@ -21,6 +20,5 @@ public class UserTest {
         assertNull(user.getId());
         assertNull(user.getBrukernavn());
         assertNull(user.getPassord());
-        assertFalse(user.isAdmin());
     }
 }

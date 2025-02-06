@@ -25,9 +25,6 @@ public class User {
    @Column(columnDefinition = "BINARY(16)")
    private UUID id;
 
-   @Column(nullable = false)
-   private boolean isAdmin;
-
    @Column(unique = true, nullable = false, length = 50)
    private String brukernavn;
 
@@ -44,12 +41,10 @@ public class User {
     *
     * @param brukernavn the username of the user
     * @param passord the password of the user
-    * @param isAdmin whether the user is an administrator
     */
-    public User(final String brukernavn, final String passord, final boolean isAdmin) {
+    public User(final String brukernavn, final String passord) {
         this.brukernavn = brukernavn;
         this.passord = passord;
-        this.isAdmin = isAdmin;
     }
 
    /**
@@ -77,15 +72,6 @@ public class User {
      */
     public String getPassord() {
         return passord;
-    }
-
-    /**
-     * Returns whether the user is an administrator.
-     *
-     * @return true if the user is an administrator, false otherwise
-     */
-    public boolean isAdmin() {
-        return isAdmin;
     }
 
    @ManyToMany(mappedBy = "participants")
