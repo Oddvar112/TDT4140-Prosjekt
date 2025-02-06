@@ -64,11 +64,11 @@ public final class JwtGenerator {
      * @param userId the unique identifier of the user
      * @return a String representing the JWT token
      */
-    public static String generateAdminToken(final String brukernavn, final UUID userId) {
+    public static String generateAdminToken(final String brukernavn, final UUID adminId) {
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(brukernavn)
-                .claim("userId", userId.toString())
+                .claim("adminId", adminId.toString())
                 .claim("isAdmin", true)
                 .setIssuedAt(new Date(currentTime))
                 .setExpiration(new Date(currentTime + TOKEN_DURATION))
@@ -93,6 +93,7 @@ public final class JwtGenerator {
             return false;
         }
     }
+
     public static String getUserIdFromToken(final String token) {
         try {
             String actualToken = token;
@@ -108,6 +109,22 @@ public final class JwtGenerator {
         } catch (Exception e) {
             throw new RuntimeException("Kunne ikke hente bruker-ID fra token", e);
         }
-}
+    }
 
+    public static String getAdminIdFromToken(final String token) {
+        try {
+            String actualToken = token;
+            if (token.startsWith("Bearer ")) {
+                actualToken = token.substring(7);
+            }
+            JwtParser parser = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
+                    .build();
+            return parser.parseClaimsJws(actualToken)
+                    .getBody()
+                    .get("adminId", String.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Kunne ikke hente admin-ID fra token", e);
+        }
+    }
 }
