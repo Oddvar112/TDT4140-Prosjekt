@@ -1,23 +1,23 @@
-image: maven:3.8.6-openjdk-17
+image: maven:3.9.6-eclipse-temurin-17
 
 variables:
- MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 cache:
- paths:
-   - .m2/repository/
-   - target/
+  paths:
+    - .m2/repository/
+    - target/
 
 stages:
- - verify
+  - verify
 
 verify:
- stage: verify
- script:
-   - cd appevent
-   - mvn checkstyle:check
-   - mvn spotbugs:check
-   - mvn clean install
- only:
-   - main
-   - merge_requests
+  stage: verify
+  script:
+    - cd appevent
+    - mvn checkstyle:check
+    - mvn spotbugs:check
+    - mvn clean install
+  only:
+    - main
+    - merge_requests
