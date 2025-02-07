@@ -15,9 +15,10 @@ verify:
   stage: verify
   script:
     - cd appevent
-    - mvn checkstyle:check
-    - mvn spotbugs:check
-    - mvn clean install
+    - mvn install -DskipTests
+    - mvn checkstyle:check     
+    - mvn spotbugs:check       
+    - mvn clean verify        
   only:
     - main
     - merge_requests
