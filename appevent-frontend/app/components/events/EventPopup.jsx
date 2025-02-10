@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -29,13 +29,25 @@ const CustomBox = ({ icon, title, children }) => (
       </Typography>
       <Box sx={iconContainerStyles}>
         {icon}
-        <Typography sx={{ pt: 0.5 }}>{children}</Typography>
+        <Typography component="div" sx={{ pt: 0.5 }}>
+          {children}
+        </Typography>
       </Box>
     </Box>
   </Grid>
 );
 
 const EventPopup = ({ open, onClose, event, formattedDate, onEventUpdate }) => {
+  const [exited, setExited] = useState(true);
+  const closeButtonRef = useRef(null);
+
+  // Handle focus restoration after transition
+  useEffect(() => {
+    if (!open && exited && closeButtonRef.current) {
+      closeButtonRef.current.focus();
+    }
+  }, [open, exited]);
+
   if (!event) return null;
 
   return (
@@ -44,9 +56,27 @@ const EventPopup = ({ open, onClose, event, formattedDate, onEventUpdate }) => {
       onClose={onClose}
       fullWidth
       maxWidth="sm"
-      disableEnforceFocus
+      aria-labelledby="event-dialog-title"
+      TransitionProps={{
+        onExited: () => setExited(true),
+        onEnter: () => setExited(false),
+      }}
+      slotProps={{
+        root: {
+          "aria-hidden": open ? false : undefined,
+        },
+      }}
+      sx={{
+        "& .MuiBackdrop-root": {
+          pointerEvents: "none",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        },
+      }}
     >
-      <DialogTitle sx={dialogTitleStyles}>{event.title}</DialogTitle>
+      <DialogTitle id="event-dialog-title" sx={dialogTitleStyles}>
+        {event.title}
+      </DialogTitle>
+
       <DialogContent>
         <Typography variant="caption" sx={captionTextStyles}>
           Detaljer:
@@ -60,6 +90,7 @@ const EventPopup = ({ open, onClose, event, formattedDate, onEventUpdate }) => {
           >
             {formattedDate}
           </CustomBox>
+
           <CustomBox title="Lokasjon:" icon={<LocationOnIcon sx={{ mr: 1 }} />}>
             {event.location}
           </CustomBox>
@@ -84,7 +115,18 @@ const EventPopup = ({ open, onClose, event, formattedDate, onEventUpdate }) => {
             styles={primaryButtonStyles}
           />
           <Box sx={{ flexGrow: 1 }} />
-          <Button size="small" onClick={onClose} color="primary">
+          <Button
+            ref={closeButtonRef}
+            size="small"
+            onClick={onClose}
+            color="primary"
+            sx={{
+              "&:focus": {
+                outline: "2px solid #2196f3",
+                boxShadow: "none",
+              },
+            }}
+          >
             Lukk
           </Button>
         </Box>
