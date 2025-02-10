@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -123,49 +122,4 @@ public class ActivityController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    /** Admin only endpoints */
-
-    @DeleteMapping("/event/{id}")
-    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, final @RequestBody UUID activityId) {
-        if (!JwtGenerator.validateAdminToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } try {
-            String adminId = JwtGenerator.getUserIdFromToken(token);
-            activityService.deleteActivity(activityId);
-            
-            // TODO: log activity deletion (with adminId and activityId)
-            
-            return ResponseEntity.ok().build();
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, final @RequestBody UUID userId) {
-        if (!JwtGenerator.validateAdminToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } try {
-            String adminId = JwtGenerator.getUserIdFromToken(token);
-            activityService.deleteUser(userId);
-
-            // TODO: log user deletion (with adminId and userId)
-
-            return ResponseEntity.ok().build();
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    // @PutMapping("/comments/{id}/moderate")
-
-    // @GetMapping("/admin/logs")
-
 }

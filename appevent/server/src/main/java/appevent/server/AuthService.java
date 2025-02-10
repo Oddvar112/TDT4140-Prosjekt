@@ -45,7 +45,7 @@ public class AuthService {
 
         if (PasswordHasher.verifyPassword(authDTO.password(), user.getPassord())) {
             if (user instanceof Admin) {
-                return JwtGenerator.generateAdminToken(user.getBrukernavn(), user.getId());
+                return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
             } else return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
         }
 

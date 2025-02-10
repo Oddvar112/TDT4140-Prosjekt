@@ -15,7 +15,7 @@ class JwtGeneratorTest {
 
     @Test
     void testGenerateAdminTokenAndValidate() {
-        String token = JwtGenerator.generateAdminToken("testAdmin", UUID.randomUUID());
+        String token = JwtGenerator.generateToken("admin", UUID.randomUUID());
         assertTrue(JwtGenerator.validateAdminToken(token));
 
         String userToken = JwtGenerator.generateToken("testNormalUser", UUID.randomUUID());
@@ -36,7 +36,7 @@ class JwtGeneratorTest {
     @Test
     void testGetAdminIdFromToken() {
         UUID id = UUID.randomUUID();
-        String token = JwtGenerator.generateAdminToken("testAdmin", id);
+        String token = JwtGenerator.generateToken("admin", id);
         assertEquals(String.valueOf(id), JwtGenerator.getUserIdFromToken(token));
     }
 

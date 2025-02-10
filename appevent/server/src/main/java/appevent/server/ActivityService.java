@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ActivityService {
+    
     private final ActivityRepository activityRepository;
     private final UserRepository userRepository;
 
@@ -103,22 +104,5 @@ public class ActivityService {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Deletes an activity.
-     *
-     * @param activityId the activity ID
-     */
-    public void deleteActivity(final UUID activityId) {
-        activityRepository.deleteById(activityId);
-    }
-
-    /**
-     * Deletes a user.
-     *
-     * @param userId the user ID
-     */
-    public void deleteUser(final UUID userId) {
-        userRepository.deleteById(userId);
-    }
 }
 

@@ -48,34 +48,15 @@ public final class JwtGenerator {
      */
     public static String generateToken(final String brukernavn, final UUID userId) {
         long currentTime = System.currentTimeMillis();
+        boolean admin = (brukernavn == "admin");
         return Jwts.builder()
             .setSubject(brukernavn)
             .claim("userId", userId.toString())
+            .claim("isAdmin", admin)
             .setIssuedAt(new Date(currentTime))
             .setExpiration(new Date(currentTime + TOKEN_DURATION))
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
             .compact();
-    }
-
-    /**
-     * Generates a JWT token for an administrator user.
-     * The token is generated with a subject, userId claim, and isAdmin claim.
-     * It contains the issued at time (iat) and expiration time (exp).
-     *
-     * @param brukernavn the username of the user
-     * @param userId the unique identifier of the user
-     * @return a String representing the JWT token
-     */
-    public static String generateAdminToken(final String brukernavn, final UUID adminId) {
-        long currentTime = System.currentTimeMillis();
-        return Jwts.builder()
-                .setSubject(brukernavn)
-                .claim("userId", adminId.toString())
-                .claim("isAdmin", true)
-                .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(currentTime + TOKEN_DURATION))
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
-                .compact();
     }
 
     /**
@@ -113,7 +94,6 @@ public final class JwtGenerator {
         }
     }
 
-    // TODO: duplicate code, refactor to use validateToken if possible
     /**
      * Validates an admin JWT token.
      *
