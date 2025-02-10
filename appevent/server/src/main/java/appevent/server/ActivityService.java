@@ -103,5 +103,20 @@ public class ActivityService {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Checks if a user is participating in a specific activity.
+     *
+    * @param activityId the id of the activity to check
+    * @param userId the id of the user to check
+    * @return true if the user is participating, false otherwise
+    * @throws RuntimeException if the activity is not found
+    */
+    public boolean isUserParticipating(final UUID activityId, final UUID userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Activity> activities = activityRepository.findByParticipantsContaining(user);
+        return activities.stream().anyMatch(activity -> activity.getId().equals(activityId));
+    }
+
 }
 
