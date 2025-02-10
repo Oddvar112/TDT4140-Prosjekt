@@ -3,7 +3,7 @@ package appevent.dto;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AuthDTOTest {
+public class AuthDToTest {
 
     @Test
     public void testAuthDTOCreation() {
