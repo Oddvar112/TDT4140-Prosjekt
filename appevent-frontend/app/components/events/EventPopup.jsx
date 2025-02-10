@@ -19,6 +19,7 @@ import {
   buttonContainerStyles,
   primaryButtonStyles,
 } from "./styles/EventPopupStyles";
+import EventToggleButton from "./EventToggleButton";
 
 const CustomBox = ({ icon, title, children }) => (
   <Grid xs={12} sm={6}>
@@ -34,7 +35,7 @@ const CustomBox = ({ icon, title, children }) => (
   </Grid>
 );
 
-const EventPopup = ({ open, onClose, event, formattedDate }) => {
+const EventPopup = ({ open, onClose, event, formattedDate, onEventUpdate }) => {
   if (!event) return null;
 
   return (
@@ -46,7 +47,6 @@ const EventPopup = ({ open, onClose, event, formattedDate }) => {
       disableEnforceFocus
     >
       <DialogTitle sx={dialogTitleStyles}>{event.title}</DialogTitle>
-
       <DialogContent>
         <Typography variant="caption" sx={captionTextStyles}>
           Detaljer:
@@ -60,7 +60,6 @@ const EventPopup = ({ open, onClose, event, formattedDate }) => {
           >
             {formattedDate}
           </CustomBox>
-
           <CustomBox title="Lokasjon:" icon={<LocationOnIcon sx={{ mr: 1 }} />}>
             {event.location}
           </CustomBox>
@@ -79,7 +78,11 @@ const EventPopup = ({ open, onClose, event, formattedDate }) => {
         </Box>
 
         <Box sx={buttonContainerStyles}>
-          <Button {...primaryButtonStyles}>Meld På</Button>
+          <EventToggleButton
+            event={event}
+            onEventUpdate={onEventUpdate}
+            styles={primaryButtonStyles}
+          />
           <Box sx={{ flexGrow: 1 }} />
           <Button size="small" onClick={onClose} color="primary">
             Lukk
