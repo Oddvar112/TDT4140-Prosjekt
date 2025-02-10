@@ -122,4 +122,29 @@ public class ActivityController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    /**
+    * Checks if the authenticated user is participating in a specific activity.
+    *
+    * @param token the authorization token
+    * @param activityId the id of the activity to check
+    * @return the response entity with boolean indicating participation status
+    */
+    @PostMapping("/isParticipating")
+    public ResponseEntity<Boolean> isParticipating(@RequestHeader("Authorization") final String token, @RequestBody final UUID activityId) {
+        if (!JwtGenerator.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            String userId = JwtGenerator.getUserIdFromToken(token);
+            return ResponseEntity.ok(
+                activityService.isUserParticipating(activityId, UUID.fromString(userId))
+            );
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
