@@ -20,6 +20,12 @@ class JwtGeneratorTest {
 
         String userToken = JwtGenerator.generateToken("testNormalUser", UUID.randomUUID());
         assertFalse(JwtGenerator.validateAdminToken(userToken));
+
+        String nullToken = null;
+        assertFalse(JwtGenerator.validateAdminToken(nullToken));
+
+        String emptyToken = "";
+        assertFalse(JwtGenerator.validateAdminToken(emptyToken));
     }
 
     @Test

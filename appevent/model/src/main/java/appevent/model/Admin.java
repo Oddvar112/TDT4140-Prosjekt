@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "admin")
+@Table(name = "adminuser")
 public class Admin extends User {
 
     @Id
