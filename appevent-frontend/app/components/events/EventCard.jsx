@@ -5,7 +5,6 @@ import {
   CardActions,
   CardContent,
   Typography,
-  Button,
   Box,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -15,13 +14,13 @@ import {
   cardStyles,
   cardActionStyles,
   iconBoxStyles,
-  buttonStyles,
   titleStyles,
   descriptionStyles,
 } from "./styles/EventCardStyles";
 import { formatDateTime, truncateText } from "./utils/helpers";
+import EventToggleButton from "./EventToggleButton";
 
-export default function EventCard({ event }) {
+export default function EventCard({ event, onEventUpdate }) {
   const maxLength = 200;
   const { truncatedText, isTruncated } = truncateText(
     event.description,
@@ -38,21 +37,18 @@ export default function EventCard({ event }) {
             <Typography variant="h5" sx={titleStyles}>
               {event.title}
             </Typography>
-
             <Box sx={iconBoxStyles}>
               <CalendarMonthIcon sx={{ mr: 1 }} />
               <Typography color="text.secondary" pt={0.5}>
                 {formattedDate}
               </Typography>
             </Box>
-
             <Box sx={{ ...iconBoxStyles, mt: 1 }}>
               <LocationOnIcon sx={{ mr: 1 }} />
               <Typography color="text.secondary" pt={0.5}>
                 {event.location}
               </Typography>
             </Box>
-
             <Typography variant="body2" sx={descriptionStyles}>
               {truncatedText}
               {isTruncated && <strong>...Read more</strong>}
@@ -61,14 +57,7 @@ export default function EventCard({ event }) {
         </CardActionArea>
 
         <CardActions sx={{ marginTop: "auto" }}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            sx={buttonStyles}
-          >
-            Meld På
-          </Button>
+          <EventToggleButton event={event} onEventUpdate={onEventUpdate} />
         </CardActions>
       </Card>
 
@@ -77,6 +66,7 @@ export default function EventCard({ event }) {
         onClose={() => setOpen(false)}
         event={event}
         formattedDate={formattedDate}
+        onEventUpdate={onEventUpdate}
       />
     </>
   );

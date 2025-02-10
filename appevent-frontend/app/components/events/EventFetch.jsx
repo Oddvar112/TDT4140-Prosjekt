@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import SkeletonLoader from "./SkeletonLoader";
 import EventCard from "./EventCard";
 import { Box, Typography } from "@mui/material";
@@ -9,8 +9,15 @@ export default function EventFetch() {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const abortControllerRef = useRef(null);
+
+  const handleEventUpdate = useCallback((updatedEvent) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.id === updatedEvent.id ? updatedEvent : event
+      )
+    );
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -19,29 +26,21 @@ export default function EventFetch() {
       setIsLoading(true);
 
       try {
-        // Get JWT token from localStorage
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
+        if (!token) throw new Error("No authentication token found");
 
         const response = await fetch(
-          `http://localhost:8080/api/activity/upcoming`,
+          "http://localhost:8080/api/activity/upcoming",
           {
             signal: abortControllerRef.current.signal,
-            headers: {
-              Authorization: `${token}`,
-            },
+            headers: { Authorization: `${token}` },
           }
         );
 
-        if (response.status === 401) {
+        if (response.status === 401)
           throw new Error("Unauthorized - Please login again");
-        }
-
-        if (!response.ok) {
+        if (!response.ok)
           throw new Error(`Failed to fetch events: ${response.statusText}`);
-        }
 
         const data = await response.json();
         setEvents(data);
@@ -83,7 +82,7 @@ export default function EventFetch() {
       >
         {events.map((event, index) => (
           <Grid xs={12} sm={6} md={4} key={event.id || index}>
-            <EventCard event={event} />
+            <EventCard event={event} onEventUpdate={handleEventUpdate} />
           </Grid>
         ))}
       </Grid>
