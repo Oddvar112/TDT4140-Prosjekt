@@ -131,7 +131,7 @@ public class ActivityController {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } try {
-            String adminId = JwtGenerator.getAdminIdFromToken(token);
+            String adminId = JwtGenerator.getUserIdFromToken(token);
             activityService.deleteActivity(activityId);
             
             // TODO: log activity deletion (with adminId and activityId)
@@ -150,7 +150,7 @@ public class ActivityController {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } try {
-            String adminId = JwtGenerator.getAdminIdFromToken(token);
+            String adminId = JwtGenerator.getUserIdFromToken(token);
             activityService.deleteUser(userId);
 
             // TODO: log user deletion (with adminId and userId)

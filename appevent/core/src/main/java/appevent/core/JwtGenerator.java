@@ -58,6 +58,27 @@ public final class JwtGenerator {
     }
 
     /**
+     * Generates a JWT token for an administrator user.
+     * The token is generated with a subject, userId claim, and isAdmin claim.
+     * It contains the issued at time (iat) and expiration time (exp).
+     *
+     * @param brukernavn the username of the user
+     * @param userId the unique identifier of the user
+     * @return a String representing the JWT token
+     */
+    public static String generateAdminToken(final String brukernavn, final UUID adminId) {
+        long currentTime = System.currentTimeMillis();
+        return Jwts.builder()
+                .setSubject(brukernavn)
+                .claim("userId", adminId.toString())
+                .claim("isAdmin", true)
+                .setIssuedAt(new Date(currentTime))
+                .setExpiration(new Date(currentTime + TOKEN_DURATION))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
      * Strips the Bearer prefix from a token if present.
      *
      * @param token the token that might contain the Bearer prefix
@@ -76,38 +97,10 @@ public final class JwtGenerator {
      * @param token the token to validate, can include Bearer prefix
      * @return true if the token is valid, false otherwise
      */
-     /**
-     * Generates a JWT token for an administrator user.
-     * The token is generated with a subject, userId claim, and isAdmin claim.
-     * It contains the issued at time (iat) and expiration time (exp).
-     *
-     * @param brukernavn the username of the user
-     * @param userId the unique identifier of the user
-     * @return a String representing the JWT token
-     */
-    public static String generateAdminToken(final String brukernavn, final UUID adminId) {
-        long currentTime = System.currentTimeMillis();
-        return Jwts.builder()
-                .setSubject(brukernavn)
-                .claim("adminId", adminId.toString())
-                .claim("isAdmin", true)
-                .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(currentTime + TOKEN_DURATION))
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    /**
-     * Validates a JWT token by parsing it.
-     *
-     * @param token the token to validate
-     * @return true if the token is valid, false otherwise
-     */
     public static boolean validateToken(final String token) {
         if (token == null || token.trim().isEmpty()) {
             return false;
         }
-
         try {
             String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()
@@ -120,23 +113,39 @@ public final class JwtGenerator {
         }
     }
 
+    // TODO: duplicate code, refactor to use validateToken if possible
+    /**
+     * Validates an admin JWT token.
+     *
+     * @param token the token to validate
+     * @return true if the token is a valid admin token, false otherwise
+     */
     public static boolean validateAdminToken(final String token) {
+        if (token == null || token.trim().isEmpty()) {
+            return false;
+        }
         try {
+            String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
                     .build();
-            Jws<Claims> claims = parser.parseClaimsJws(token);
+            Jws<Claims> claims = parser.parseClaimsJws(actualToken);
             return claims.getBody().get("isAdmin", Boolean.class);
         } catch (Exception e) {
             return false;
         }
     }
 
+    /**
+     * Extracts the user ID from a JWT token. Works for Admin tokens too.
+     *
+     * @param token the token to extract the user ID from
+     * @return the user ID as a String
+     */
     public static String getUserIdFromToken(final String token) {
         if (token == null || token.trim().isEmpty()) {
             throw new RuntimeException("Token cannot be null or empty");
         }
-
         try {
             String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()
@@ -147,23 +156,6 @@ public final class JwtGenerator {
                     .get("userId", String.class);
         } catch (Exception e) {
             throw new RuntimeException("Kunne ikke hente bruker-ID fra token", e);
-        }
-    }
-
-    public static String getAdminIdFromToken(final String token) {
-        try {
-            String actualToken = token;
-            if (token.startsWith("Bearer ")) {
-                actualToken = token.substring(7);
-            }
-            JwtParser parser = Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
-                    .build();
-            return parser.parseClaimsJws(actualToken)
-                    .getBody()
-                    .get("adminId", String.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Kunne ikke hente admin-ID fra token", e);
         }
     }
 }
