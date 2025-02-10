@@ -1,0 +1,24 @@
+image: maven:3.9.6-eclipse-temurin-17
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+stages:
+  - verify
+
+verify:
+  stage: verify
+  script:
+    - cd appevent
+    - mvn install -DskipTests
+    - mvn checkstyle:check     
+    - mvn spotbugs:check       
+    - mvn clean verify        
+  only:
+    - main
+    - merge_requests

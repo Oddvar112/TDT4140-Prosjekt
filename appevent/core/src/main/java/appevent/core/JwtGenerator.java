@@ -11,12 +11,12 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Utility class for generating simple JWT (JSON Web Token) tokens.
- * This class provides a static method for generating basic JWT tokens
- * with a 30-minute expiration time.
+ * Utility class for generating and validating JWT (JSON Web Token) tokens.
+ * This class provides methods for generating, validating, and parsing JWT tokens,
+ * with support for Bearer token format.
  *
  * @author YourName
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 public final class JwtGenerator {
@@ -25,8 +25,8 @@ public final class JwtGenerator {
      * The duration in milliseconds for which the token will be valid (30 minutes).
      */
     private static final long TOKEN_DURATION = 30 * 60 * 1000;
-    private static final byte[] SECRET_KEY = "0123456789ABCDEF0123456789ABCDEF".getBytes(); //denne må vi endre etterhvert
-
+    private static final byte[] SECRET_KEY = "0123456789ABCDEF0123456789ABCDEF".getBytes();
+    private static final String BEARER_PREFIX = "Bearer ";
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -38,14 +38,14 @@ public final class JwtGenerator {
     }
 
     /**
-    * Generates a basic JWT token with an expiration time.
-    * The token is generated with a subject and userId claim.
+     * Generates a basic JWT token with an expiration time.
+     * The token is generated with a subject and userId claim.
      * It contains the issued at time (iat) and expiration time (exp).
-    *
-    * @param brukernavn the username of the user
-    * @param userId the unique identifier of the user
-    * @return a String representing the JWT token
-    */
+     *
+     * @param brukernavn the username of the user
+     * @param userId the unique identifier of the user
+     * @return a String representing the JWT token
+     */
     public static String generateToken(final String brukernavn, final UUID userId) {
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
@@ -58,6 +58,25 @@ public final class JwtGenerator {
     }
 
     /**
+     * Strips the Bearer prefix from a token if present.
+     *
+     * @param token the token that might contain the Bearer prefix
+     * @return the token without the Bearer prefix
+     */
+    private static String stripBearerPrefix(final String token) {
+        if (token != null && token.startsWith(BEARER_PREFIX)) {
+            return token.substring(BEARER_PREFIX.length());
+        }
+        return token;
+    }
+
+    /**
+     * Validates a JWT token, supporting both Bearer and raw token formats.
+     *
+     * @param token the token to validate, can include Bearer prefix
+     * @return true if the token is valid, false otherwise
+     */
+     /**
      * Generates a JWT token for an administrator user.
      * The token is generated with a subject, userId claim, and isAdmin claim.
      * It contains the issued at time (iat) and expiration time (exp).
@@ -85,11 +104,16 @@ public final class JwtGenerator {
      * @return true if the token is valid, false otherwise
      */
     public static boolean validateToken(final String token) {
+        if (token == null || token.trim().isEmpty()) {
+            return false;
+        }
+
         try {
+            String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
                     .build();
-            parser.parseClaimsJws(token);
+            parser.parseClaimsJws(actualToken);
             return true;
         } catch (Exception e) {
             return false;
@@ -109,11 +133,12 @@ public final class JwtGenerator {
     }
 
     public static String getUserIdFromToken(final String token) {
+        if (token == null || token.trim().isEmpty()) {
+            throw new RuntimeException("Token cannot be null or empty");
+        }
+
         try {
-            String actualToken = token;
-            if (token.startsWith("Bearer ")) {
-                actualToken = token.substring(7);
-            }
+            String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
                     .build();
