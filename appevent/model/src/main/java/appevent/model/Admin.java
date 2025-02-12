@@ -9,7 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
+/**
+ * Entity representing an Admin-user.
+ */
 @Entity
 @Table(name = "adminuser")
 public class Admin extends User {
@@ -25,10 +27,18 @@ public class Admin extends User {
     @Column(nullable = false)
     private String passord;
 
+    /**
+     * Default constructor for JPA.
+     */
     protected Admin() { }
 
+    /**
+     * Constructs a new Admin with the specified username and password.
+     *
+     * @param brukernavn the username of the admin
+     * @param passord the password of the admin
+     */
     public Admin(final String brukernavn, final String passord) {
         super(brukernavn, passord);
     }
-    
 }

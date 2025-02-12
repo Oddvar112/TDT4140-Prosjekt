@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ActivityService {
-    
+
     private final ActivityRepository activityRepository;
     private final UserRepository userRepository;
 
