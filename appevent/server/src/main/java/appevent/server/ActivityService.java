@@ -118,5 +118,22 @@ public class ActivityService {
         return activities.stream().anyMatch(activity -> activity.getId().equals(activityId));
     }
 
+    /**
+    * Retrieves a specific activity by its ID.
+    *
+    * @param activityId the ID of the activity to retrieve
+    * @return the activity DTO
+    * @throws RuntimeException if the activity is not found
+    */
+    public ActivityDTO getActivityById(final UUID activityId) {
+    LocalDateTime oldDate = LocalDateTime.now().minusYears(1);
+    List<Activity> activities = activityRepository.findByDateTimeAfterOrderByDateTimeAsc(oldDate);
+    Activity activity = activities.stream()
+        .filter(act -> act.getId().equals(activityId))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("Activity not found"));
+    return convertToActivityDTO(activity);
+    }
+
 }
 

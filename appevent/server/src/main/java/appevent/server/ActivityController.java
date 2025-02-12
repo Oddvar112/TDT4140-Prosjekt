@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -140,6 +141,30 @@ public class ActivityController {
             return ResponseEntity.ok(
                 activityService.isUserParticipating(activityId, UUID.fromString(userId))
             );
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+    * Retrieves a specific activity by its ID.
+    *
+    * @param token the authorization token
+    * @param activityId the ID of the activity to retrieve
+    * @return the response entity with the activity or an error status
+     */
+    @GetMapping("/{activityId}")
+    public ResponseEntity<ActivityDTO> getActivity(@RequestHeader("Authorization") final String token, @PathVariable("activityId") final UUID activityId) {
+     /**
+        if (!JwtGenerator.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+     /**/
+        try {
+            ActivityDTO activity = activityService.getActivityById(activityId);
+            return ResponseEntity.ok(activity);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
