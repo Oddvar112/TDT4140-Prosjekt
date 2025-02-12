@@ -118,5 +118,18 @@ public class ActivityService {
         return activities.stream().anyMatch(activity -> activity.getId().equals(activityId));
     }
 
+    /**
+    * Retrieves a specific activity by its ID.
+    *
+    * @param activityId the ID of the activity to retrieve
+    * @return the activity DTO
+    * @throws RuntimeException if the activity is not found
+    */
+    public ActivityDTO getActivityById(final UUID activityId) {
+        Activity activity = activityRepository.findById(activityId)
+            .orElseThrow(() -> new RuntimeException("Activity not found"));
+        return convertToActivityDTO(activity);
+    }
+
 }
 
