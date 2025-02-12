@@ -14,7 +14,34 @@ class JwtGeneratorTest {
     }
 
     @Test
+    void testGenerateAdminTokenAndValidate() {
+        String token = JwtGenerator.generateToken("admin", UUID.randomUUID());
+        assertTrue(JwtGenerator.validateAdminToken(token));
+
+        String userToken = JwtGenerator.generateToken("testNormalUser", UUID.randomUUID());
+        assertFalse(JwtGenerator.validateAdminToken(userToken));
+
+        String nullToken = null;
+        assertFalse(JwtGenerator.validateAdminToken(nullToken));
+
+        String emptyToken = "";
+        assertFalse(JwtGenerator.validateAdminToken(emptyToken));
+    }
+
+    @Test
     void testInvalidToken() {
         assertFalse(JwtGenerator.validateToken("invalid.token.value"));
+    }
+
+    @Test
+    void testGetAdminIdFromToken() {
+        UUID id = UUID.randomUUID();
+        String token = JwtGenerator.generateToken("admin", id);
+        assertEquals(String.valueOf(id), JwtGenerator.getUserIdFromToken(token));
+    }
+
+    @Test
+    void testGeIdFromInvalidToken() {
+        assertThrows(Exception.class, () -> JwtGenerator.getUserIdFromToken("invalid.token.value"));
     }
 }

@@ -1,5 +1,7 @@
 package appevent.core;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -46,9 +48,11 @@ public final class JwtGenerator {
      */
     public static String generateToken(final String brukernavn, final UUID userId) {
         long currentTime = System.currentTimeMillis();
+        boolean admin = "admin".equals(brukernavn);
         return Jwts.builder()
             .setSubject(brukernavn)
             .claim("userId", userId.toString())
+            .claim("isAdmin", admin)
             .setIssuedAt(new Date(currentTime))
             .setExpiration(new Date(currentTime + TOKEN_DURATION))
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY), SignatureAlgorithm.HS256)
@@ -78,7 +82,6 @@ public final class JwtGenerator {
         if (token == null || token.trim().isEmpty()) {
             return false;
         }
-
         try {
             String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()
@@ -92,17 +95,37 @@ public final class JwtGenerator {
     }
 
     /**
-     * Extracts the user ID from a JWT token, supporting both Bearer and raw token formats.
+     * Validates an admin JWT token.
      *
-     * @param token the token to extract the user ID from, can include Bearer prefix
-     * @return the user ID stored in the token
-     * @throws RuntimeException if the token is invalid or the user ID cannot be extracted
+     * @param token the token to validate
+     * @return true if the token is a valid admin token, false otherwise
+     */
+    public static boolean validateAdminToken(final String token) {
+        if (token == null || token.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            String actualToken = stripBearerPrefix(token);
+            JwtParser parser = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY))
+                    .build();
+            Jws<Claims> claims = parser.parseClaimsJws(actualToken);
+            return claims.getBody().get("isAdmin", Boolean.class);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Extracts the user ID from a JWT token. Works for Admin tokens too.
+     *
+     * @param token the token to extract the user ID from
+     * @return the user ID as a String
      */
     public static String getUserIdFromToken(final String token) {
         if (token == null || token.trim().isEmpty()) {
             throw new RuntimeException("Token cannot be null or empty");
         }
-
         try {
             String actualToken = stripBearerPrefix(token);
             JwtParser parser = Jwts.parserBuilder()

@@ -43,7 +43,7 @@ public class AuthService {
             .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
 
         if (PasswordHasher.verifyPassword(authDTO.password(), user.getPassord())) {
-            return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
+                return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
         }
 
         throw new IllegalArgumentException("Feil passord");

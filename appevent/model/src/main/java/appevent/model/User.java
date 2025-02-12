@@ -31,7 +31,7 @@ public class User {
    @Column(nullable = false)
    private String passord;
 
-   /**
+    /**
     * Default constructor for JPA.
     */
    protected User() { }
@@ -42,10 +42,10 @@ public class User {
     * @param brukernavn the username of the user
     * @param passord the password of the user
     */
-   public User(final String brukernavn, final String passord) {
-       this.brukernavn = brukernavn;
-       this.passord = passord;
-   }
+    public User(final String brukernavn, final String passord) {
+        this.brukernavn = brukernavn;
+        this.passord = passord;
+    }
 
    /**
     * Returns the unique identifier of the user.
@@ -56,23 +56,23 @@ public class User {
        return id;
    }
 
-   /**
+    /**
     * Returns the username of the user.
     *
     * @return the username of the user
     */
-   public String getBrukernavn() {
-       return brukernavn;
-   }
+    public String getBrukernavn() {
+        return brukernavn;
+    }
 
-   /**
-    * Returns the password of the user.
-    *
-    * @return the password of the user
-    */
-   public String getPassord() {
-       return passord;
-   }
+    /**
+     * Returns the password of the user.
+     *
+     * @return the password of the user
+     */
+    public String getPassord() {
+        return passord;
+    }
 
    @ManyToMany(mappedBy = "participants")
     private Set<Activity> activities = new HashSet<>();
