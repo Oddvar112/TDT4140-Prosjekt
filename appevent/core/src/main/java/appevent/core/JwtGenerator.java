@@ -48,7 +48,7 @@ public final class JwtGenerator {
      */
     public static String generateToken(final String brukernavn, final UUID userId) {
         long currentTime = System.currentTimeMillis();
-        boolean admin = (brukernavn == "admin");
+        boolean admin = "admin".equals(brukernavn);
         return Jwts.builder()
             .setSubject(brukernavn)
             .claim("userId", userId.toString())

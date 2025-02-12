@@ -5,11 +5,15 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
-
+import org.springframework.web.bind.annotation.RestController;
 import appevent.core.JwtGenerator;
-
+import jakarta.transaction.Transactional;
+/**
+ * REST controller for admin operations.
+ */
+@RestController
 public class AdminController {
 
     private final AdminService adminService;
@@ -28,8 +32,9 @@ public class AdminController {
      * @param activityId the id of the activity to delete
      * @return a response entity with the status of the deletion
      */
-    @DeleteMapping("/admin/event")
-    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, final @RequestBody UUID activityId) {
+    @Transactional
+    @DeleteMapping("/admin/event/{activityId}")
+    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, @PathVariable("activityId") UUID activityId) {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -49,8 +54,9 @@ public class AdminController {
      * @param userId the id of the user to delete
      * @return a response entity with the status of the deletion
      */
-    @DeleteMapping("/admin/user")
-    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, final @RequestBody UUID userId) {
+    @Transactional
+    @DeleteMapping("/admin/user/{userId}")
+    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, @PathVariable("userId") UUID userId) {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

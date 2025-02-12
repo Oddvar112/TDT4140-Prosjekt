@@ -1,10 +1,10 @@
 package appevent.server;
-
 import java.util.UUID;
-
+import org.springframework.stereotype.Service;
 import appevent.model.ActivityRepository;
 import appevent.model.UserRepository;
 
+@Service
 public class AdminService {
 
     private final ActivityRepository activityRepository;

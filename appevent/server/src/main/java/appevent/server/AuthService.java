@@ -9,7 +9,6 @@ import appevent.dto.AuthDTORegistration;
 import appevent.core.JwtGenerator;
 import appevent.core.PasswordHasher;
 import appevent.core.Validator;
-import appevent.model.Admin;
 import appevent.model.User;
 import appevent.model.UserRepository;
 
@@ -44,11 +43,7 @@ public class AuthService {
             .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
 
         if (PasswordHasher.verifyPassword(authDTO.password(), user.getPassord())) {
-            if (user instanceof Admin) {
                 return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
-            } else {
-                return JwtGenerator.generateToken(user.getBrukernavn(), user.getId());
-            }
         }
 
         throw new IllegalArgumentException("Feil passord");
