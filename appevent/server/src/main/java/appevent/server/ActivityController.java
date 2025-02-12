@@ -155,13 +155,12 @@ public class ActivityController {
     * @param activityId the ID of the activity to retrieve
     * @return the response entity with the activity or an error status
      */
-    @GetMapping("/{activityId}")
+    @Transactional
+    @GetMapping("/activityinfo/{activityId}")
     public ResponseEntity<ActivityDTO> getActivity(@RequestHeader("Authorization") final String token, @PathVariable("activityId") final UUID activityId) {
-     /**
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-     /**/
         try {
             ActivityDTO activity = activityService.getActivityById(activityId);
             return ResponseEntity.ok(activity);
