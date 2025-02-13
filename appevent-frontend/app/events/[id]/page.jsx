@@ -17,7 +17,7 @@ export default function EventDetail() {
   if (!event) return <div>No event found</div>;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 animate-in my-16">
+    <div className="max-w-3xl mx-auto px-6 space-y-8 animate-in my-16">
       <div className="flex items-start -mb-6">
         <Button
           variant="ghost"
