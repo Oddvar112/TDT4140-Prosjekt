@@ -21,7 +21,7 @@ const Navbar = () => {
               className="gap-2 font-bold text-base"
             >
               <PlusCircle className="h-4 w-4" />
-              Opprett event
+              Opprett Arrangement
             </Button>
           </Link>
 
