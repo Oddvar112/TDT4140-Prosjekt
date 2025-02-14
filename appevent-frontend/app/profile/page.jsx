@@ -34,7 +34,8 @@ export function Profile() {
           <CardTitle>{username}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Uhh noe randome text mby her</p>
+          <p className="text-muted-foreground">Velkommen til din profilside. Her kan du se en oversikt over arrangementene du har meldt deg på.
+          </p>
         </CardContent>
       </Card>
 
