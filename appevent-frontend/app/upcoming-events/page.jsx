@@ -40,7 +40,13 @@ export function UpcomingEventPage() {
             <CardContent className="space-y-2">
               <div className="flex items-center text-sm text-muted-foreground">
                 <Calendar className="mr-2 h-4 w-4" />
-                {new Date(event.dateTime).toLocaleString()}
+                {new Date(event.dateTime).toLocaleString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </div>
               <div className="flex items-center text-sm text-muted-foreground">
                 <MapPin className="mr-2 h-4 w-4" />
