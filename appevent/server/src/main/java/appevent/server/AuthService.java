@@ -37,7 +37,6 @@ public class AuthService {
      * @throws IllegalArgumentException if the user is not found or the password is incorrect
      */
     public String login(final AuthDTO authDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        validateCredentials(authDTO.username(), authDTO.password());
 
         User user = userRepository.findByBrukernavn(authDTO.username())
             .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
@@ -60,13 +59,11 @@ public class AuthService {
      * @throws IllegalArgumentException if the username is already taken or validation fails
      */
     public String register(final AuthDTORegistration authDTORegistration) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        validateCredentials(authDTORegistration.username(), authDTORegistration.password());
-        validateRegistration(authDTORegistration);
-
         if (userRepository.findByBrukernavn(authDTORegistration.username()).isPresent()) {
             throw new IllegalArgumentException("Brukernavn er allerede tatt");
         }
-
+        validateCredentials(authDTORegistration.username(), authDTORegistration.password());
+        validateRegistration(authDTORegistration);
         String hashedPassword = PasswordHasher.hashPassword(authDTORegistration.password());
         User newUser = new User(authDTORegistration.username(), hashedPassword);
         userRepository.save(newUser);
