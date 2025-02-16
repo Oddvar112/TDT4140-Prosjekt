@@ -85,116 +85,118 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      <header className="text-center space-y-4 my-14">
-        <h1 className="text-4xl font-bold header-gradient">
-          {isLogin ? 'Logg inn på AppEvent' : 'Registrer deg på AppEvent'}
-        </h1>
-        <p className="text-muted-foreground">
-          {isLogin 
-            ? 'Logg inn for å delta eller opprette arrangementer' 
-            : 'Opprett en konto for å delta på arrangementer'}
-        </p>
-      </header>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-6xl">
+        <header className="text-center space-y-4 mb-8">
+          <h1 className="text-4xl font-bold header-gradient">
+            {isLogin ? 'Logg inn på AppEvent' : 'Registrer deg på AppEvent'}
+          </h1>
+          <p className="text-muted-foreground">
+            {isLogin 
+              ? 'Logg inn for å delta eller opprette arrangementer' 
+              : 'Opprett en konto for å delta på arrangementer'}
+          </p>
+        </header>
 
-      <div className="flex justify-center m-8">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">
-              {isLogin ? 'Login' : 'Registrer deg'}
-            </CardTitle>
-          </CardHeader>
-          <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
-              {error && (
-                <div className="bg-red-50 text-red-600 p-4 rounded-lg">
-                  {error}
-                </div>
-              )}
-              
-              <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <User className="w-4 h-4 text-muted-foreground" />
-                  <Input
-                    type="text"
-                    name="username"
-                    placeholder="Brukernavn"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    className="flex-1"
-                    required
-                  />
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Lock className="w-4 h-4 text-muted-foreground" />
-                  <Input
-                    type="password"
-                    name="password"
-                    placeholder="Passord"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="flex-1"
-                    required
-                  />
-                </div>
-
-                {!isLogin && (
+        <div className="flex justify-center">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="text-2xl text-center">
+                {isLogin ? 'Login' : 'Registrer deg'}
+              </CardTitle>
+            </CardHeader>
+            <form onSubmit={handleSubmit}>
+              <CardContent className="space-y-4">
+                {error && (
+                  <div className="bg-red-50 text-red-600 p-4 rounded-lg">
+                    {error}
+                  </div>
+                )}
+                
+                <div className="space-y-4">
                   <div className="flex items-center space-x-2">
-                    <Lock className="w-4 h-4 text-muted-foreground" />
+                    <User className="w-4 h-4 text-muted-foreground" />
                     <Input
-                      type="password"
-                      name="confirmPassword"
-                      placeholder="Bekreft passord"
-                      value={formData.confirmPassword}
+                      type="text"
+                      name="username"
+                      placeholder="Brukernavn"
+                      value={formData.username}
                       onChange={handleInputChange}
                       className="flex-1"
                       required
                     />
                   </div>
-                )}
-              </div>
-            </CardContent>
 
-            <CardFooter className="flex flex-col space-y-4">
-              <Button 
-                type="submit" 
-                className="w-full"
-                disabled={isLoading}
-              >
-                {isLoading 
-                  ? (isLogin ? 'Logger inn...' : 'Registrerer...') 
-                  : (isLogin ? 'Logg inn' : 'Registrer deg')}
-              </Button>
-              
-              <div className="text-sm text-center text-muted-foreground">
-                {isLogin ? (
-                  <>
-                    Har du ikke en konto?{' '}
-                    <button 
-                      type="button"
-                      onClick={toggleMode}
-                      className="text-primary hover:underline"
-                    >
-                      Registrer deg her
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    Har du allerede en konto?{' '}
-                    <button
-                      type="button"
-                      onClick={toggleMode}
-                      className="text-primary hover:underline"
-                    >
-                      Logg inn her
-                    </button>
-                  </>
-                )}
-              </div>
-            </CardFooter>
-          </form>
-        </Card>
+                  <div className="flex items-center space-x-2">
+                    <Lock className="w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="password"
+                      name="password"
+                      placeholder="Passord"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="flex-1"
+                      required
+                    />
+                  </div>
+
+                  {!isLogin && (
+                    <div className="flex items-center space-x-2">
+                      <Lock className="w-4 h-4 text-muted-foreground" />
+                      <Input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Bekreft passord"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        className="flex-1"
+                        required
+                      />
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+
+              <CardFooter className="flex flex-col space-y-4">
+                <Button 
+                  type="submit" 
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading 
+                    ? (isLogin ? 'Logger inn...' : 'Registrerer...') 
+                    : (isLogin ? 'Logg inn' : 'Registrer deg')}
+                </Button>
+                
+                <div className="text-sm text-center text-muted-foreground">
+                  {isLogin ? (
+                    <>
+                      Har du ikke en konto?{' '}
+                      <button 
+                        type="button"
+                        onClick={toggleMode}
+                        className="text-primary hover:underline"
+                      >
+                        Registrer deg her
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      Har du allerede en konto?{' '}
+                      <button
+                        type="button"
+                        onClick={toggleMode}
+                        className="text-primary hover:underline"
+                      >
+                        Logg inn her
+                      </button>
+                    </>
+                  )}
+                </div>
+              </CardFooter>
+            </form>
+          </Card>
+        </div>
       </div>
     </div>
   );
