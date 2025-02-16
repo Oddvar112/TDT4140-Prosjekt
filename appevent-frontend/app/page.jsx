@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -9,11 +8,11 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
     if (token) {
-      router.push('/events'); 
+      router.push('/events');
     } else {
-      router.push('/login'); 
+      router.push('/login');
     }
-  }, []);
+  }, [router]); 
 
   return (
     <div className="min-h-screen flex items-center justify-center">
