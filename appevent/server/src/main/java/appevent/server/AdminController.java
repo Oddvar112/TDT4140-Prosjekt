@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,6 +15,7 @@ import jakarta.transaction.Transactional;
  * REST controller for admin operations.
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdminController {
 
     private final AdminService adminService;
@@ -34,7 +36,7 @@ public class AdminController {
      */
     @Transactional
     @DeleteMapping("/admin/event/{activityId}")
-    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, @PathVariable("activityId") UUID activityId) {
+    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, final @PathVariable("activityId") UUID activityId) {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -56,7 +58,7 @@ public class AdminController {
      */
     @Transactional
     @DeleteMapping("/admin/user/{userId}")
-    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, @PathVariable("userId") UUID userId) {
+    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, final @PathVariable("userId") UUID userId) {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

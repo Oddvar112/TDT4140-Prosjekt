@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import appevent.dto.AuthDTO;
 import appevent.dto.AuthDTORegistration;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * It provides endpoints for user login and registration and returns appropriate HTTP statuses
  * and responses based on the outcome.
  */
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
