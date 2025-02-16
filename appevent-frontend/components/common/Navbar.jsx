@@ -1,8 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Calendar, User } from "lucide-react";
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
+  const pathname = usePathname();
+  
+  if (pathname === '/login') {
+    return null;
+  }
+
   return (
     <nav className="w-full sticky top-0 border-b-2 border-zinc-300 bg-zinc-200 z-10">
       <div className="max-w-screen-xl mx-auto flex h-16 items-center px-4">
