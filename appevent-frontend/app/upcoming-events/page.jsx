@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardHeader,
@@ -6,13 +7,49 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Calendar, MapPin, Users } from "lucide-react";
+import { Calendar, MapPin, Users, Trash2 } from "lucide-react";
 import { UpcomingEventsFetch } from "../../api/events/getUpcomingEvents";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
 
 export function UpcomingEventPage() {
   const { events, isLoading, error } = UpcomingEventsFetch();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setIsAdmin(payload.isAdmin === true);
+      } catch (e) {
+        console.error('Error parsing JWT token:', e);
+        setIsAdmin(false);
+      }
+    }
+  }, []);
+
+  const handleDelete = async (eventId) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://localhost:8080/admin/event/${eventId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        },
+      });
+      
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        console.error('Failed to delete event');
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
 
   if (isLoading) return <div>Loading events...</div>;
   if (error) return <div className="error">Error: {error}</div>;
@@ -57,12 +94,22 @@ export function UpcomingEventPage() {
                 {event.participants?.length || 0}
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col gap-2 w-full">
               <Link href={`/events/${event.id}`} className="w-full">
                 <Button variant="default" className="w-full">
                   Se Detaljer
                 </Button>
               </Link>
+              {isAdmin && (
+                <Button 
+                  variant="destructive" 
+                  className="w-full"
+                  onClick={() => handleDelete(event.id)}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Slett Arrangement
+                </Button>
+              )}
             </CardFooter>
           </Card>
         ))}
