@@ -36,7 +36,7 @@ public class AdminController {
      */
     @Transactional
     @DeleteMapping("/admin/event/{activityId}")
-    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, @PathVariable("activityId") UUID activityId) {
+    public ResponseEntity<?> deleteActivity(final @RequestHeader("Authorization") String token, final @PathVariable("activityId") UUID activityId) {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -58,7 +58,7 @@ public class AdminController {
      */
     @Transactional
     @DeleteMapping("/admin/user/{userId}")
-    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, @PathVariable("userId") UUID userId) {
+    public ResponseEntity<?> deleteUser(final @RequestHeader("Authorization") String token, final @PathVariable("userId") UUID userId) {
         if (!JwtGenerator.validateAdminToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
