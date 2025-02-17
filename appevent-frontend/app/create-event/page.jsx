@@ -173,6 +173,7 @@ const CreateEvent = () => {
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
+                              fromDate={new Date()}
                             />
                           </PopoverContent>
                         </Popover>
