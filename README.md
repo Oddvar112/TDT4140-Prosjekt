@@ -40,4 +40,4 @@ For å utvikle AppEvent benytter vi følgende teknologier og rammeverk:
 1. Åpne en ny terminal.
 2. Naviger til frontend-mappen.
 3. Sikre at alle avhengigheter er installert med `npm install`.
-4. Start React-serveren med `npm start`.
+4. Start React-serveren fra npn run dev i folderen "appevent-frontend"
