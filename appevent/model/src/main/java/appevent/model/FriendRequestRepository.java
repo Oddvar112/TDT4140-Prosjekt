@@ -28,9 +28,8 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, UU
 
     /**
      * Checks if a friend request exists between a sender and receiver that is not yet accepted.
-     *
+     * @param receiverId the IDof the receiver
      * @param senderId the ID of the sender
-     * @param receiverId the ID of the receiver
      * @return true if such a friend request exists, false otherwise
      */
     boolean existsBySenderIdAndReceiverIdAndAcceptedFalse(UUID senderId, UUID receiverId);
