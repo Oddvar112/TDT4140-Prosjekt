@@ -21,6 +21,7 @@ export const postCreateEvent = () => {
           dateTime: eventData.dateTime,
           location: eventData.location,
           description: eventData.description,
+          isPrivate: Boolean(eventData.isPrivate), 
           participants: [],
         }),
       });
