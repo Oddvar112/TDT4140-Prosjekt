@@ -7,7 +7,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Calendar, MapPin, Users, Trash2 } from "lucide-react";
+import { Calendar, MapPin, Users, Trash2, Lock, Globe } from "lucide-react";
 import { UpcomingEventsFetch } from "../../api/events/getUpcomingEvents";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -69,10 +69,25 @@ export function UpcomingEventPage() {
         {events.map((event) => (
           <Card
             key={event.id}
-            className="card-hover-effect w-full border-3 border-gray300"
+            className="w-full"
           >
             <CardHeader>
-              <CardTitle>{event.title}</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">{event.title}</CardTitle>
+                <div className="flex items-center gap-2">
+                  {event.isPrivate ? (
+                    <div className="flex items-center text-amber-600">
+                      <Lock className="h-4 w-4 mr-1" />
+                      <span className="text-sm font-medium">Privat</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center text-green-600">
+                      <Globe className="h-4 w-4 mr-1" />
+                      <span className="text-sm font-medium">Offentlig</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex items-center text-sm text-muted-foreground">
@@ -91,26 +106,28 @@ export function UpcomingEventPage() {
               </div>
               <div className="flex items-center text-sm text-muted-foreground">
                 <Users className="mr-2 h-4 w-4" />
-                {event.participants?.length || 0}
+                {event.participants?.length || 0} påmeldte
               </div>
-            </CardContent>
-            <CardFooter className="flex flex-col gap-2 w-full">
-              <Link href={`/events/${event.id}`} className="w-full">
-                <Button variant="default" className="w-full">
-                  Se Detaljer
-                </Button>
-              </Link>
+              <div className="mt-4">
+                <Link href={`/events/${event.id}`} className="w-full">
+                  <Button variant="default" className="w-full">
+                    Se Detaljer
+                  </Button>
+                </Link>
+              </div>
               {isAdmin && (
-                <Button 
-                  variant="destructive" 
-                  className="w-full"
-                  onClick={() => handleDelete(event.id)}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Slett Arrangement
-                </Button>
+                <div className="mt-2">
+                  <Button 
+                    variant="destructive" 
+                    className="w-full"
+                    onClick={() => handleDelete(event.id)}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Slett Arrangement
+                  </Button>
+                </div>
               )}
-            </CardFooter>
+            </CardContent>
           </Card>
         ))}
       </div>
