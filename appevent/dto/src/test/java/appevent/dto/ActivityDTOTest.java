@@ -2,6 +2,7 @@ package appevent.dto;
 
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,8 +17,9 @@ public class ActivityDTOTest {
         String location = "Test Location";
         String description = "Test Description";
         Set<UserDTO> participants = Set.of(new UserDTO(UUID.randomUUID(), "testuser"));
+        CommentDTO commentDTO = new CommentDTO(UUID.randomUUID(), UUID.randomUUID(), "testuser", "Test Comment");
 
-        ActivityDTO activityDTO = new ActivityDTO(id, title, dateTime, location, description, participants);
+        ActivityDTO activityDTO = new ActivityDTO(id, title, dateTime, location, description, false, id, description, participants, List.of(commentDTO));
 
         assertEquals(id, activityDTO.id());
         assertEquals(title, activityDTO.title());
