@@ -1,3 +1,8 @@
 package appevent.dto;
 
-public record CommentRequestDTO(String content) {}
+/**
+ * Data Transfer Object for comment requests.
+ *
+ * @param content the content of the comment
+ */
+public record CommentRequestDTO(String content) { }

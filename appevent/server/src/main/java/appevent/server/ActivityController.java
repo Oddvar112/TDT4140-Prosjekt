@@ -6,7 +6,14 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import appevent.core.JwtGenerator;
 import appevent.dto.ActivityDTO;
 import appevent.dto.CommentDTO;
@@ -41,7 +48,7 @@ public class ActivityController {
      */
     @Transactional
     @GetMapping("/upcoming")
-    public ResponseEntity<List<ActivityDTO>> getUpcomingActivities(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<ActivityDTO>> getUpcomingActivities(final @RequestHeader("Authorization") String token) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -61,7 +68,7 @@ public class ActivityController {
      * @return the response entity with the status of the operation
      */
     @PostMapping("/toggleParticipation")
-    public ResponseEntity<String> toggleRegistration(@RequestHeader("Authorization") String token, @RequestBody UUID activityId) {
+    public ResponseEntity<String> toggleRegistration(final @RequestHeader("Authorization") String token, final @RequestBody UUID activityId) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -94,7 +101,7 @@ public class ActivityController {
      */
     @Transactional
     @PostMapping("/add")
-    public ResponseEntity<Void> addActivity(@RequestHeader("Authorization") String token, @RequestBody ActivityDTO activity) {
+    public ResponseEntity<Void> addActivity(final @RequestHeader("Authorization") String token, final @RequestBody ActivityDTO activity) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -115,7 +122,7 @@ public class ActivityController {
      */
     @Transactional
     @GetMapping("/myactivities")
-    public ResponseEntity<List<ActivityDTO>> getMyActivities(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<ActivityDTO>> getMyActivities(final @RequestHeader("Authorization") String token) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -137,7 +144,7 @@ public class ActivityController {
      * @return the response entity with boolean indicating participation status
      */
     @PostMapping("/isParticipating")
-    public ResponseEntity<Boolean> isParticipating(@RequestHeader("Authorization") String token, @RequestBody UUID activityId) {
+    public ResponseEntity<Boolean> isParticipating(final @RequestHeader("Authorization") String token, final @RequestBody UUID activityId) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -162,7 +169,7 @@ public class ActivityController {
      */
     @Transactional
     @GetMapping("/activityinfo/{activityId}")
-    public ResponseEntity<ActivityDTO> getActivity(@RequestHeader("Authorization") String token, @PathVariable("activityId") UUID activityId) {
+    public ResponseEntity<ActivityDTO> getActivity(final @RequestHeader("Authorization") String token, final @PathVariable("activityId") UUID activityId) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -188,7 +195,7 @@ public class ActivityController {
      * @return the response entity with the status of the operation
      */
     @PostMapping("/{activityId}/invite/{inviteeId}")
-    public ResponseEntity<String> inviteParticipant(@RequestHeader("Authorization") String token,@PathVariable("activityId") UUID activityId, @PathVariable("inviteeId") UUID inviteeId) {
+    public ResponseEntity<String> inviteParticipant(final @RequestHeader("Authorization") String token, final @PathVariable("activityId") UUID activityId, final @PathVariable("inviteeId") UUID inviteeId) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -213,7 +220,7 @@ public class ActivityController {
     */
     @Transactional
     @GetMapping("/owned")
-    public ResponseEntity<List<ActivityDTO>> getOwnedActivities(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<ActivityDTO>> getOwnedActivities(final @RequestHeader("Authorization") String token) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -232,22 +239,22 @@ public class ActivityController {
      *
      * @param token the authorization token
      * @param activityId the ID of the activity
-     * @param commentContent the content of the comment
+     * @param request the comment request
      * @return the response entity with the added comment or an error status
      */
     @Transactional
     @PostMapping("/{activityId}/comment")
-    public ResponseEntity<CommentDTO> addComment(@RequestHeader("Authorization") String token,@PathVariable("activityId") UUID activityId,@RequestBody CommentRequestDTO request) {
+    public ResponseEntity<CommentDTO> addComment(final @RequestHeader("Authorization") String token, final @PathVariable("activityId") UUID activityId, final @RequestBody CommentRequestDTO request) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {
             String userId = JwtGenerator.getUserIdFromToken(token);
-            CommentDTO addedComment = activityService.addComment(activityId,UUID.fromString(userId),request.content());
+            CommentDTO addedComment = activityService.addComment(activityId, UUID.fromString(userId), request.content());
             return ResponseEntity.status(HttpStatus.CREATED).body(addedComment);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch(IllegalAccessError e) {
+        } catch (IllegalAccessError e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

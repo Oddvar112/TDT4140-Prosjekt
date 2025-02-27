@@ -19,7 +19,6 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
      * Finds all activities occurring after the specified date that are visible to the user.
      *
      * @param date the date to compare
-     * @param userId the ID of the user
      * @return the list of visible activities after the specified date, ordered by date
      */
     List<Activity> findByDateTimeAfterOrderByDateTimeAsc(LocalDateTime date);
@@ -48,8 +47,10 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
      * @param userId the ID of the participant
      * @return list of activities the user participates in
      */
-    @Query("SELECT DISTINCT a FROM Activity a " +
-           "JOIN a.participants p " +
+    @Query("SELECT DISTINCT a FROM Activity a "
+            +
+           "JOIN a.participants p "
+           +
            "WHERE p.id = :userId")
     List<Activity> findByParticipantId(@Param("userId") UUID userId);
 
