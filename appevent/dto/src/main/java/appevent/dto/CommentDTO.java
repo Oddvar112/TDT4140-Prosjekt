@@ -7,7 +7,6 @@ import java.util.UUID;
  *
  * @param id the unique identifier of the comment
  * @param userId the unique identifier of the user who made the comment
- * 
  * @param username the username of the user who made the comment
  * @param content the content of the comment
  */

@@ -15,20 +15,29 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing friend-related operations.
+ */
 @Service
 public class FriendService {
     private final UserRepository userRepository;
     private final FriendRequestRepository friendRequestRepository;
     private final ActivityRepository activityRepository;
 
-    public FriendService(UserRepository userRepository, FriendRequestRepository friendRequestRepository, ActivityRepository activityRepository) {
+    public FriendService(final UserRepository userRepository, final FriendRequestRepository friendRequestRepository, final ActivityRepository activityRepository) {
         this.userRepository = userRepository;
         this.friendRequestRepository = friendRequestRepository;
         this.activityRepository = activityRepository;
     }
 
+    /**
+     * Retrieves the list of friends for a given user.
+     *
+     * @param userId the ID of the user
+     * @return a list of UserDTO representing the user's friends
+     */
     @Transactional(readOnly = true)
-    public List<UserDTO> getFriends(UUID userId) {
+    public List<UserDTO> getFriends(final UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
 
@@ -37,8 +46,14 @@ public class FriendService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Sends a friend request from one user to another.
+     *
+     * @param senderId the ID of the sender
+     * @param receiverId the ID of the receiver
+     */
     @Transactional
-    public void sendFriendRequest(UUID senderId, UUID receiverId) {
+    public void sendFriendRequest(final UUID senderId, final UUID receiverId) {
         if (senderId.equals(receiverId)) {
             throw new IllegalArgumentException("Du kan ikke sende venneforespørsel til deg selv");
         }
@@ -60,8 +75,14 @@ public class FriendService {
         friendRequestRepository.save(request);
     }
 
+    /**
+     * Accepts a friend request.
+     *
+     * @param requestId the ID of the friend request
+     * @param receiverId the ID of the receiver
+     */
     @Transactional
-    public void acceptFriendRequest(UUID requestId, UUID receiverId) {
+    public void acceptFriendRequest(final UUID requestId, final UUID receiverId) {
         FriendRequest request = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Venneforespørsel ikke funnet"));
 
@@ -74,14 +95,20 @@ public class FriendService {
         User receiver = request.getReceiver();
 
         sender.addFriend(receiver);
-        
+
         userRepository.save(sender);
         userRepository.save(receiver);
         friendRequestRepository.save(request);
     }
 
+    /**
+     * Rejects a friend request.
+     *
+     * @param requestId the ID of the friend request
+     * @param receiverId the ID of the receiver
+     */
     @Transactional
-    public void rejectFriendRequest(UUID requestId, UUID receiverId) {
+    public void rejectFriendRequest(final UUID requestId, final UUID receiverId) {
         FriendRequest request = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Venneforespørsel ikke funnet"));
 
@@ -92,8 +119,14 @@ public class FriendService {
         friendRequestRepository.delete(request);
     }
 
+    /**
+     * Retrieves the list of pending friend requests for a user.
+     *
+     * @param userId the ID of the user
+     * @return a list of FriendRequestDTO representing the pending friend requests
+     */
     @Transactional
-    public List<FriendRequestDTO> getPendingRequests(UUID userId) {
+    public List<FriendRequestDTO> getPendingRequests(final UUID userId) {
         return friendRequestRepository.findByReceiverIdAndAcceptedFalse(userId).stream()
             .map(request -> new FriendRequestDTO(
                 request.getId(),
@@ -101,8 +134,14 @@ public class FriendService {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Removes a friend from a user's friend list.
+     *
+     * @param userId the ID of the user
+     * @param friendId the ID of the friend to remove
+     */
     @Transactional
-    public void removeFriend(UUID userId, UUID friendId) {
+    public void removeFriend(final UUID userId, final UUID friendId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
         User friend = userRepository.findById(friendId)
@@ -117,8 +156,15 @@ public class FriendService {
         userRepository.save(friend);
     }
 
+    /**
+     * Retrieves the list of friends who are not invited to a specific event.
+     *
+     * @param userId the ID of the user
+     * @param eventId the ID of the event
+     * @return a list of UserDTO representing the friends not invited to the event
+     */
     @Transactional(readOnly = true)
-    public List<UserDTO> getFriendsNotInvitedToEvent(UUID userId, UUID eventId) {
+    public List<UserDTO> getFriendsNotInvitedToEvent(final UUID userId, final UUID eventId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
 

@@ -21,19 +21,20 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ActivityRepository activityRepository;
-    FriendRequestRepository requestRepo;
+    private final FriendRequestRepository requestRepo;
 
     /**
      * Constructs a UserService with the specified repositories.
      *
      * @param userRepository repository for user operations
      * @param activityRepository repository for activity operations
+     * @param friendRequestRepository repository for friend request operations
      */
-    public UserService(UserRepository userRepository, ActivityRepository activityRepository, FriendRequestRepository friendRequestRepository) {
+    public UserService(final UserRepository userRepository, final ActivityRepository activityRepository, final FriendRequestRepository friendRequestRepository) {
         this.userRepository = userRepository;
         this.activityRepository = activityRepository;
         this.requestRepo = friendRequestRepository;
-    }   
+    }
 
     /**
      * Search for users by username.
@@ -43,13 +44,13 @@ public class UserService {
      * @return list of matching users
      */
     @Transactional
-    public List<UserDTO> searchUsers(String searchTerm, UUID currentUserId) {
+    public List<UserDTO> searchUsers(final String searchTerm, final UUID currentUserId) {
         User currentUser = userRepository.findById(currentUserId)
-                .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));    
+                .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
         return userRepository.findByBrukernavnContainingIgnoreCase(searchTerm).stream()
-                .filter(user -> !user.getId().equals(currentUserId)) 
-                .filter(user -> !currentUser.getFriends().contains(user)) 
-                .filter(user -> !requestRepo.existsBySenderIdAndReceiverIdAndAcceptedFalse(currentUserId, user.getId())) 
+                .filter(user -> !user.getId().equals(currentUserId))
+                .filter(user -> !currentUser.getFriends().contains(user))
+                .filter(user -> !requestRepo.existsBySenderIdAndReceiverIdAndAcceptedFalse(currentUserId, user.getId()))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -61,7 +62,7 @@ public class UserService {
      * @throws IllegalArgumentException if user is not found
      */
     @Transactional
-    public UserDTO getUserProfile(UUID userId) {
+    public UserDTO getUserProfile(final UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
         return convertToDTO(user);
@@ -75,7 +76,7 @@ public class UserService {
      * @throws IllegalArgumentException if user is not found
      */
     @Transactional
-    public UserDTO getUserById(UUID userId) {
+    public UserDTO getUserById(final UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Bruker ikke funnet"));
         return convertToDTO(user);
@@ -88,7 +89,7 @@ public class UserService {
      * @return true if username is available, false otherwise
      */
     @Transactional
-    public boolean isUsernameAvailable(String username) {
+    public boolean isUsernameAvailable(final String username) {
         return userRepository.findByBrukernavn(username).isEmpty();
     }
 
@@ -100,7 +101,7 @@ public class UserService {
      * @throws IllegalArgumentException if activity is not found
      */
     @Transactional
-    public List<UserDTO> getUsersByActivity(UUID activityId) {
+    public List<UserDTO> getUsersByActivity(final UUID activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new IllegalArgumentException("Aktivitet ikke funnet"));
         return activity.getParticipants().stream()
@@ -114,7 +115,7 @@ public class UserService {
      * @param user the user entity to convert
      * @return the converted UserDTO
      */
-    private UserDTO convertToDTO(User user) {
+    private UserDTO convertToDTO(final User user) {
         return new UserDTO(user.getId(), user.getBrukernavn());
     }
 }

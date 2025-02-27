@@ -5,7 +5,13 @@ import appevent.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +33,7 @@ public class UserController {
      * @param userService the service handling user operations
      */
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
 
@@ -39,9 +45,7 @@ public class UserController {
      * @return list of matching users
      */
     @GetMapping("/search")
-    public ResponseEntity<List<UserDTO>> searchUsers(
-        @RequestHeader("Authorization") String token,
-        @RequestParam(name = "term", required = true) String term) {
+    public ResponseEntity<List<UserDTO>> searchUsers(final @RequestHeader("Authorization") String token, final @RequestParam(name = "term", required = true) String term) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -60,8 +64,7 @@ public class UserController {
      * @return user profile information
      */
     @GetMapping("/profile")
-    public ResponseEntity<UserDTO> getUserProfile(
-            @RequestHeader("Authorization") String token) {
+    public ResponseEntity<UserDTO> getUserProfile(final @RequestHeader("Authorization") String token) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -83,9 +86,7 @@ public class UserController {
      * @return user profile information
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUserById(
-            @RequestHeader("Authorization") String token,
-            @PathVariable UUID userId) {
+    public ResponseEntity<UserDTO> getUserById(final @RequestHeader("Authorization") String token, final @PathVariable UUID userId) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -105,7 +106,7 @@ public class UserController {
      * @return true if username is available, false otherwise
      */
     @GetMapping("/check-username/{username}")
-    public ResponseEntity<Boolean> isUsernameAvailable(@PathVariable String username) {
+    public ResponseEntity<Boolean> isUsernameAvailable(final @PathVariable String username) {
         try {
             return ResponseEntity.ok(userService.isUsernameAvailable(username));
         } catch (Exception e) {
@@ -121,9 +122,7 @@ public class UserController {
      * @return list of users registered for the activity
      */
     @GetMapping("/activity/{activityId}")
-    public ResponseEntity<List<UserDTO>> getUsersByActivity(
-            @RequestHeader("Authorization") String token,
-            @PathVariable UUID activityId) {
+    public ResponseEntity<List<UserDTO>> getUsersByActivity(final @RequestHeader("Authorization") String token, final @PathVariable UUID activityId) {
         if (!JwtGenerator.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
