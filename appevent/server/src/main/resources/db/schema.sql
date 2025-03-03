@@ -59,3 +59,13 @@ CREATE TABLE IF NOT EXISTS activity_comments (
     FOREIGN KEY (activity_id) REFERENCES activity(id),
     FOREIGN KEY (user_id) REFERENCES appuser(id)
 );
+
+CREATE TABLE IF NOT EXISTS activity_images (
+    id BINARY(16) PRIMARY KEY,
+    activity_id BINARY(16) NOT NULL,
+    user_id BINARY(16) NOT NULL,
+    image_data LONGBLOB NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (activity_id) REFERENCES activity(id),
+    FOREIGN KEY (user_id) REFERENCES appuser(id)
+);
