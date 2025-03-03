@@ -207,6 +207,8 @@ const removeFriend = async (friendId) => {
         <CardContent>
           <p className="text-muted-foreground">
             Velkommen til din profilside. Her kan du se en oversikt over arrangementer og håndtere dine venner.
+            Du kan under tidligere arrangementer se en oversikt over tidligere arrangementer du har deltatt på og 
+            laste opp bilde fra arrangementet.
           </p>
         </CardContent>
       </Card>
