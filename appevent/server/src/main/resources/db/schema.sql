@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS activity (
     title VARCHAR(255) NOT NULL,
     date_time DATETIME NOT NULL,
     location VARCHAR(255) NOT NULL,
-    description VARCHAR(1000)
+    description VARCHAR(1000),
+    type VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS activity_participants (

@@ -52,10 +52,11 @@ public class ActivityService {
      * @return the activity DTO
      */
     private ActivityDTO convertToActivityDTO(final Activity activity) {
+
     Set<UserDTO> participantDTOs = activity.getParticipants().stream()
         .map(user -> new UserDTO(user.getId(), user.getBrukernavn()))
         .collect(Collectors.toSet());
-    return new ActivityDTO(activity.getId(), activity.getTitle(), activity.getDateTime(), activity.getLocation(), activity.getDescription(), participantDTOs);
+    return new ActivityDTO(activity.getId(), activity.getTitle(), activity.getDateTime(), activity.getLocation(), activity.getDescription(), participantDTOs, activity.getType());
     }
 
 
@@ -85,7 +86,7 @@ public class ActivityService {
      * @param activityDTO the activity details
      */
     public void addActivity(final ActivityDTO activityDTO) {
-        Activity activity = new Activity(activityDTO.title(), activityDTO.dateTime(), activityDTO.location(), activityDTO.description());
+        Activity activity = new Activity(activityDTO.title(), activityDTO.dateTime(), activityDTO.location(), activityDTO.description(), activityDTO.type());
         activityRepository.save(activity);
     }
 
@@ -131,6 +132,5 @@ public class ActivityService {
             .orElseThrow(() -> new RuntimeException("Activity not found"));
         return convertToActivityDTO(activity);
     }
-
 }
 

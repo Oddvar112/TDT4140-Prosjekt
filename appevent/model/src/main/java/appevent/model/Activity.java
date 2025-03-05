@@ -37,14 +37,17 @@ public class Activity {
 
     @Column(length = 1000)
     private String description;
-
+    
     @ManyToMany
     @JoinTable(
-    name = "activity_participants",
-    joinColumns = @JoinColumn(name = "activity_id"),
-    inverseJoinColumns = @JoinColumn(name = "participant_id")  // Endret fra user_id
+        name = "activity_participants",
+        joinColumns = @JoinColumn(name = "activity_id"),
+        inverseJoinColumns = @JoinColumn(name = "participant_id")  // Endret fra user_id
     )
     private Set<User> participants = new HashSet<>();
+     
+    @Column(nullable = false)
+    private String type;
 
     /**
      * Default constructor for JPA.
@@ -58,12 +61,14 @@ public class Activity {
      * @param dateTime the date and time of the activity
      * @param location the location of the activity
      * @param description the description of the activity
+     * @param type the type of the activity
      */
-    public Activity(final String title, final LocalDateTime dateTime, final String location, final String description) {
+    public Activity(final String title, final LocalDateTime dateTime, final String location, final String description, final String type) {
         this.title = title;
         this.dateTime = dateTime;
         this.location = location;
         this.description = description;
+        this.type = type;
     }
 
     /**
@@ -147,6 +152,7 @@ public class Activity {
         this.location = location;
     }
 
+    
     /**
      * Gets the description of the activity.
      *
@@ -155,7 +161,7 @@ public class Activity {
     public String getDescription() {
         return description;
     }
-
+    
     /**
      * Sets the description of the activity.
      *
@@ -164,7 +170,7 @@ public class Activity {
     public void setDescription(final String description) {
         this.description = description;
     }
-
+    
     /**
      * Gets the participants of the activity.
      *
@@ -172,5 +178,23 @@ public class Activity {
      */
     public Set<User> getParticipants() {
         return participants;
+    }
+    
+    /**
+     * Gets the type of the activity.
+     *
+     * @return the activity type
+     */
+    public String getType() {
+        return type;
+    }
+    
+    /**
+     * Sets the type of the activity.
+     *
+     * @param type the new type
+     */
+    public void setType(final String type) {
+        this.type = type;
     }
 }
