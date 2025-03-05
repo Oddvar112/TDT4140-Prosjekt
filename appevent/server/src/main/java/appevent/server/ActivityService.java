@@ -1,6 +1,7 @@
 package appevent.server;
 
 import appevent.dto.ActivityDTO;
+import appevent.dto.SearchDTO;
 import appevent.dto.UserDTO;
 import appevent.model.Activity;
 import appevent.model.ActivityRepository;
@@ -131,6 +132,24 @@ public class ActivityService {
         Activity activity = activityRepository.findById(activityId)
             .orElseThrow(() -> new RuntimeException("Activity not found"));
         return convertToActivityDTO(activity);
+    }
+
+        /**
+     * Searches for activities based on the search criteria.
+     *
+     * @param search the search criteria
+     * @return the list of activities matching the search criteria
+     */
+    public List<ActivityDTO> searchActivities(final SearchDTO search) {
+        List<Activity> activities = activityRepository.findAll();
+        List<ActivityDTO> foundActivities = activities
+            .stream()
+            .filter(a -> a.getTitle().toLowerCase().contains(search.searchString().toLowerCase()))
+            .filter(a -> a.getType().equals(search.type()))
+            .filter(a -> a.getDateTime().isAfter(search.date()))
+            .map(this::convertToActivityDTO)
+            .toList();
+        return foundActivities;
     }
 }
 
