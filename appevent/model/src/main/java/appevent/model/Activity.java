@@ -37,7 +37,7 @@ public class Activity {
 
     @Column(length = 1000)
     private String description;
-    
+
     @ManyToMany
     @JoinTable(
         name = "activity_participants",
@@ -45,7 +45,7 @@ public class Activity {
         inverseJoinColumns = @JoinColumn(name = "participant_id")  // Endret fra user_id
     )
     private Set<User> participants = new HashSet<>();
-     
+
     @Column(nullable = false)
     private String type;
 
@@ -152,7 +152,6 @@ public class Activity {
         this.location = location;
     }
 
-    
     /**
      * Gets the description of the activity.
      *
@@ -161,7 +160,7 @@ public class Activity {
     public String getDescription() {
         return description;
     }
-    
+
     /**
      * Sets the description of the activity.
      *
@@ -170,7 +169,7 @@ public class Activity {
     public void setDescription(final String description) {
         this.description = description;
     }
-    
+
     /**
      * Gets the participants of the activity.
      *
@@ -179,7 +178,7 @@ public class Activity {
     public Set<User> getParticipants() {
         return participants;
     }
-    
+
     /**
      * Gets the type of the activity.
      *
@@ -188,7 +187,7 @@ public class Activity {
     public String getType() {
         return type;
     }
-    
+
     /**
      * Sets the type of the activity.
      *
