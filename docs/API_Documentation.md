@@ -309,7 +309,8 @@ Finner aktiviteter som matcher informasjonen i søket.
       "id": "UUID",
       "brukernavn": "string"
     }
-  ]
+  ],
+  "type": "string"
 }
 ```
 
