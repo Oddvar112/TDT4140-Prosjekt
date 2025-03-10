@@ -71,4 +71,28 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+        /**
+     * Deletes an image by its ID.
+     * @param token the JWT token of the authenticated user
+     * @param imageId the ID of the image to delete
+     * @return a ResponseEntity with the status of the deletion
+     */
+    @DeleteMapping("/admin/image/{imageId}")
+    @Transactional
+    public ResponseEntity<?> deleteImage(final @RequestHeader("Authorization") String token, final @PathVariable("imageId") UUID imageId) {
+        if (!JwtGenerator.validateAdminToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            String userId = JwtGenerator.getUserIdFromToken(token);
+            adminService.deleteImage(imageId, UUID.fromString(userId));
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("En feil oppstod under sletting av bildet");
+        }
+    }
 }
