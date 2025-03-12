@@ -5,13 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Calendar, MapPin, Users, ChevronLeft, UserPlus, UserMinus, Search, Check, X, Bell } from "lucide-react";
+import { Calendar, MapPin, Users, ChevronLeft, UserPlus, UserMinus, Search, Check, X, Bell, LogOut } from "lucide-react";
 import { attendingEventsFetch } from "../../api/events/getAttendingEvents";
 import Link from "next/link";
 import { getUsername } from "@/utils/getinfofromJWT";
 import { useRouter } from "next/navigation";
 import { ownedEventsFetch } from "../../api/events/getOwnedEvents";
 import { pastEventsFetch } from "../../api/events/getPastEvents";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function Profile() {
   const { events, isLoading, error } = attendingEventsFetch();
@@ -24,6 +33,7 @@ export function Profile() {
   const [searchResults, setSearchResults] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
   const [alert, setAlert] = useState({ show: false, message: "", type: "success" });
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchFriends();
@@ -170,6 +180,16 @@ const removeFriend = async (friendId) => {
   }
 };
 
+  const handleLogout = () => {
+    setLogoutDialogOpen(false);
+    
+    localStorage.removeItem("token");
+    
+    setTimeout(() => {
+      router.push("/login");
+    });
+  };
+
   if (isLoading || pastLoading) return <div>Loading...</div>;
   if (error || pastError) return <div className="error">Error: {error || pastError}</div>;
 
@@ -205,11 +225,36 @@ const removeFriend = async (friendId) => {
           <CardTitle>{username}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-4">
             Velkommen til din profilside. Her kan du se en oversikt over arrangementer og håndtere dine venner.
             Du kan under tidligere arrangementer se en oversikt over tidligere arrangementer du har deltatt på og 
             laste opp bilde fra arrangementet.
           </p>
+          <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="destructive" className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Logg ut
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Er du sikker på at du vil logge ut?</DialogTitle>
+                  <DialogDescription>
+                    Du må logge inn igjen for å få tilgang til profilen din.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="flex justify-between sm:justify-between">
+                  <Button
+                    type="button" variant="outline" onClick={() => setLogoutDialogOpen(false)}>
+                    Avbryt
+                  </Button>
+                  <Button type="button" variant="destructive" onClick={handleLogout}>
+                    Logg ut
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
         </CardContent>
       </Card>
 
