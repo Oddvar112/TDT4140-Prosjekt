@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Calendar, User } from "lucide-react";
+import { PlusCircle, Calendar, User, Search } from "lucide-react";
 import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
@@ -23,6 +23,16 @@ const Navbar = () => {
         <div className="flex-1" />
 
         <div className="flex items-center space-x-4">
+          <Link href="/search">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2 font-bold text-base"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+          </Link>
+
           <Link href="/create-event">
             <Button
               variant="ghost"
