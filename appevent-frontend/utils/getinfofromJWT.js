@@ -3,7 +3,11 @@
  * Change the key 'token' if your token is stored under a different name.
  */
 function getToken() {
-  return localStorage.getItem("token");
+  // Check if we're in a browser environment
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem("token");
+  }
+  return null;
 }
 
 /**
@@ -35,6 +39,11 @@ function decodePayload(token) {
  * @returns {object|null} - The payload or null if token is not found/decoded.
  */
 export function getPayload() {
+  // Ensure this only runs in the browser
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   const token = getToken();
   if (!token) {
     console.warn("No token found in localStorage");

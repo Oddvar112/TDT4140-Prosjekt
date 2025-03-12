@@ -1,5 +1,6 @@
 package appevent.model;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,5 +23,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return Optional containing the user if found
      */
     Optional<User> findById(UUID id);
+
+    List<User> findByBrukernavnContainingIgnoreCase(String searchTerm);
+
 
 }

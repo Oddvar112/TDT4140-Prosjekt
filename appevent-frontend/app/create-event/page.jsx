@@ -9,6 +9,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
@@ -42,6 +43,7 @@ const formSchema = z.object({
   minute: z.string().min(1),
   location: z.string().min(1, "Lokasjon må fylles ut"),
   description: z.string().min(1, "Beskrivelse må fylles ut"),
+  isPrivate: z.boolean().default(false),
 });
 
 // event init
@@ -59,6 +61,7 @@ const CreateEvent = () => {
       minute: "00",
       location: "",
       description: "",
+      isPrivate: false,
     },
   });
 
@@ -75,6 +78,7 @@ const CreateEvent = () => {
         dateTime: dateTime,
         location: data.location,
         description: data.description,
+        isPrivate: data.isPrivate,
       };
 
       const success = await createEvent(eventData);
@@ -128,6 +132,7 @@ const CreateEvent = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Title field */}
               <FormField
                 control={form.control}
                 name="title"
@@ -142,6 +147,7 @@ const CreateEvent = () => {
                 )}
               />
 
+              {/* Date and Time fields */}
               <div className="space-y-2">
                 <FormLabel>Dato & Tid</FormLabel>
                 <div className="flex flex-wrap gap-4">
@@ -252,6 +258,7 @@ const CreateEvent = () => {
                 </div>
               </div>
 
+              {/* Location field */}
               <FormField
                 control={form.control}
                 name="location"
@@ -269,6 +276,7 @@ const CreateEvent = () => {
                 )}
               />
 
+              {/* Description field */}
               <FormField
                 control={form.control}
                 name="description"
@@ -286,6 +294,31 @@ const CreateEvent = () => {
                 )}
               />
 
+              {/* Private event checkbox */}
+              <FormField
+                control={form.control}
+                name="isPrivate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <input
+                        type="checkbox"
+                        checked={field.value}
+                        onChange={field.onChange}
+                        className="h-4 w-4 mt-1"
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Privat Arrangement</FormLabel>
+                      <FormDescription>
+                        Gjør arrangementet privat for å kontrollere hvem som kan delta
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              {/* Submit button */}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Oppretter..." : "Opprett Arrangment"}
               </Button>
