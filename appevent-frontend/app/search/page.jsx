@@ -7,7 +7,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Calendar as CalendarIcon, MapPin, Users, Trash2 } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, Users, Trash2, Globe, Lock } from "lucide-react";
 import { SearchedEventsFetch } from "../../api/events/getSearchedEvents";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -88,13 +88,13 @@ const CreateSearch = () => {
 
       toast({
         title: "Success",
-        description: `Arrangementer funnet. ${events.length} events.`,
+        description: `Arrangementer funnet.`,
       });
 
     } catch (error) {
       toast({
         title: "Error",
-        description: `Kunne ikke finne arrangementer. Prøv igjen. ${error}`,
+        description: `Kunne ikke finne arrangementer. Prøv igjen.`,
         variant: "destructive",
       });
     } finally {
@@ -316,6 +316,19 @@ const CreateSearch = () => {
                     >
                       <CardHeader>
                         <CardTitle>{event.title}</CardTitle>
+                        <div className="flex items-center gap-2">
+                          {event.isPrivate ? (
+                            <div className="flex items-center text-amber-600">
+                              <Lock className="h-4 w-4 mr-1" />
+                              <span className="text-sm font-medium">Privat</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center text-green-600">
+                              <Globe className="h-4 w-4 mr-1" />
+                              <span className="text-sm font-medium">Offentlig</span>
+                            </div>
+                          )}
+                        </div>
                       </CardHeader>
                       <CardContent className="space-y-2">
                         <div className="flex items-center text-sm text-muted-foreground">
