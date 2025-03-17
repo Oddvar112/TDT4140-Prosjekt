@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS activity (
     date_time DATETIME NOT NULL,
     location VARCHAR(255) NOT NULL,
     description VARCHAR(1000),
+    type VARCHAR(255) NOT NULL,
     is_private BOOLEAN NOT NULL DEFAULT FALSE,
     owner_id BINARY(16) NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES appuser(id)

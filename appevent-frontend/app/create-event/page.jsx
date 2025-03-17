@@ -43,6 +43,7 @@ const formSchema = z.object({
   minute: z.string().min(1),
   location: z.string().min(1, "Lokasjon må fylles ut"),
   description: z.string().min(1, "Beskrivelse må fylles ut"),
+  type: z.string().min(1, "Velg en type"),
   isPrivate: z.boolean().default(false),
 });
 
@@ -61,6 +62,7 @@ const CreateEvent = () => {
       minute: "00",
       location: "",
       description: "",
+      type: undefined,
       isPrivate: false,
     },
   });
@@ -78,6 +80,7 @@ const CreateEvent = () => {
         dateTime: dateTime,
         location: data.location,
         description: data.description,
+        type: data.type,
         isPrivate: data.isPrivate,
       };
 
@@ -235,7 +238,7 @@ const CreateEvent = () => {
                             defaultValue={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger className="w-24 h-10">
+                              <SelectTrigger className="w-28 h-10">
                                 <SelectValue placeholder="Min" />
                               </SelectTrigger>
                             </FormControl>
@@ -259,22 +262,55 @@ const CreateEvent = () => {
               </div>
 
               {/* Location field */}
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Lokasjon</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Skriv inn lokasjon her..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex space-x-4">
+                <div className="flex flex-wrap gap-4">
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Lokasjon</FormLabel>
+                        <FormControl>
+                          <Input className="w-64 h-10"
+                            placeholder="Skriv inn lokasjon her..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <FormField
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Type</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-28 h-10 text-muted-foreground">
+                              <SelectValue placeholder="Velg type"/>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent> 
+                            <SelectItem value="Konsert">Konsert</SelectItem>
+                            <SelectItem value="Fest">Fest</SelectItem>
+                            <SelectItem value="Markering">Markering</SelectItem>
+                            <SelectItem value="Show">Show</SelectItem>
+                            <SelectItem value="Musikk">Musikk</SelectItem>
+                            <SelectItem value="Annet">Annet</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
               {/* Description field */}
               <FormField

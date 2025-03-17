@@ -17,6 +17,7 @@ import java.util.UUID;
  * @param ownerId the unique identifier of the owner of the activity
  * @param ownerUsername the username of the owner of the activity
  * @param participants the set of participants in the activity
+ * @param type the type of the activity
  * @param comments the list of comments on the activity
  */
 public record ActivityDTO(
@@ -25,6 +26,7 @@ public record ActivityDTO(
     LocalDateTime dateTime,
     String location,
     String description,
+    String type,
     boolean isPrivate,
     UUID ownerId,
     String ownerUsername,

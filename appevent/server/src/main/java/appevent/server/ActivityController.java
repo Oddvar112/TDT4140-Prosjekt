@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import appevent.core.JwtGenerator;
 import appevent.dto.ActivityDTO;
+import appevent.dto.SearchDTO;
 import appevent.dto.CommentDTO;
 import appevent.dto.CommentRequestDTO;
 import appevent.dto.ImageDTO;
@@ -383,6 +384,27 @@ public class ActivityController {
         }
     }
 
+    /**
+     * Searches for activities based on a search containing a time, type, and optional search string.
+     * @param token the authorization token
+     * @param search the search details
+     * @return the response entity with the list of activities or an error status
+     */
+    @Transactional
+    @PostMapping("/search")
+    public ResponseEntity<List<ActivityDTO>> searchActivities(@RequestHeader("Authorization") final String token, @RequestBody final SearchDTO search) {
+        if (!JwtGenerator.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            String userId = JwtGenerator.getUserIdFromToken(token);
+        boolean isAdmin = JwtGenerator.validateAdminToken(token);
+        List<ActivityDTO> activities = activityService.searchActivities(search, UUID.fromString(userId), isAdmin);
+            return ResponseEntity.ok(activities);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
     /**
      * Checks if an activity has been completed (past the activity date and time).
      *

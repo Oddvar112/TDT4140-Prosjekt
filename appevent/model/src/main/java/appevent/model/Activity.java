@@ -43,6 +43,9 @@ public final class Activity {
     private String description;
 
     @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
     private boolean isPrivate;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -77,15 +80,17 @@ public final class Activity {
      * @param dateTime the date and time of the activity
      * @param location the location of the activity
      * @param description the description of the activity
+     * @param type the type of the activity
      * @param owner the user who owns this activity
      * @param isPrivate whether this activity is private
      */
     public Activity(final String title, final LocalDateTime dateTime, final String location,
-                    final String description, final User owner, final boolean isPrivate) {
+                    final String description, final String type, final User owner, final boolean isPrivate) {
         this.title = title;
         this.dateTime = dateTime;
         this.location = location;
         this.description = description;
+        this.type = type;
         this.owner = owner;
         this.isPrivate = isPrivate;
         this.participants.add(owner);
@@ -289,6 +294,24 @@ public final class Activity {
      */
     public Set<User> getParticipants() {
         return participants;
+    }
+
+    /**
+     * Gets the type of the activity.
+     *
+     * @return the activity type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Sets the type of the activity.
+     *
+     * @param type the new type
+     */
+    public void setType(final String type) {
+        this.type = type;
     }
 
     /**

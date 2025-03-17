@@ -10,7 +10,9 @@ export const postCreateEvent = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/api/activity/add", {
+      const response = await fetch(
+        "http://localhost:8080/api/activity/add", 
+        {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,6 +25,7 @@ export const postCreateEvent = () => {
           description: eventData.description,
           isPrivate: Boolean(eventData.isPrivate), 
           participants: [],
+          type: eventData.type,
         }),
       });
 

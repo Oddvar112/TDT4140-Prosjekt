@@ -1,6 +1,7 @@
 package appevent.server;
 
 import appevent.dto.ActivityDTO;
+import appevent.dto.SearchDTO;
 import appevent.dto.CommentDTO;
 import appevent.dto.ImageDTO;
 import appevent.dto.ImageUploadDTO;
@@ -76,7 +77,7 @@ public class ActivityService {
                    .anyMatch(participant -> participant.getId().equals(userId))
                    || activity.getInvitedUsers().stream()
                    .anyMatch(invitee -> invitee.getId().equals(userId));
-    }
+    }   
 
     /**
      * Converts an Activity entity to an ActivityDTO.
@@ -104,6 +105,7 @@ public class ActivityService {
             activity.getDateTime(),
             activity.getLocation(),
             activity.getDescription(),
+            activity.getType(),
             activity.isPrivate(),
             activity.getOwner().getId(),
             activity.getOwner().getBrukernavn(),
@@ -162,6 +164,7 @@ public class ActivityService {
             activityDTO.dateTime(),
             activityDTO.location(),
             activityDTO.description(),
+            activityDTO.type(),
             owner,
             activityDTO.isPrivate()
         );
@@ -249,6 +252,7 @@ public class ActivityService {
         List<Activity> activities = activityRepository.findByParticipantsContaining(user);
         return activities.stream().anyMatch(activity -> activity.getId().equals(activityId));
     }
+
     /**
      * Retrieves all activities owned by a specific user.
      * This method returns activities where the specified user is the creator/owner.
@@ -265,6 +269,26 @@ public class ActivityService {
             .map(this::convertToActivityDTO)
             .collect(Collectors.toList());
     }
+
+    /**
+     * Searches for activities based on the search criteria.
+     *
+     * @param search the search criteria
+     * @return the list of activities matching the search criteria
+     */
+    public List<ActivityDTO> searchActivities(final SearchDTO search, final UUID userId, final boolean isAdmin) {
+        List<Activity> activities = activityRepository.findAll();
+        List<ActivityDTO> foundActivities = activities
+                .stream()
+                .filter(a -> a.getTitle().toLowerCase().contains(search.searchString().toLowerCase()))
+                .filter(a -> a.getType().equals(search.type()))
+                .filter(a -> a.getDateTime().isAfter(search.date()))
+                .filter(a -> isActivityVisibleToUser(a, userId, isAdmin))
+                .map(this::convertToActivityDTO)
+                .toList();
+        return foundActivities;
+    }
+
     /**
      * Adds a comment to an activity.
      * @param isAdmin true if the user is an admin, false otherwise

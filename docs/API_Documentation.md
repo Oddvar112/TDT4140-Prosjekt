@@ -13,11 +13,13 @@
     - [Registrere deltakelse](#registrere-deltakelse)
     - [Legge til ny aktivitet](#legge-til-ny-aktivitet)
     - [Hente mine aktiviteter](#hente-mine-aktiviteter)
+    - [Søke etter aktiviteter](#søke-etter-aktiviteter)
   - [Datamodeller](#datamodeller)
     - [AuthDTO](#authdto)
     - [AuthDTORegistration](#authdtoregistration)
     - [ActivityDTO](#activitydto)
     - [UserDTO](#userdto)
+    - [SearchDTO](#searchdto)
   - [Feilhåndtering](#feilhåndtering)
 
 ## Introduksjon
@@ -224,6 +226,54 @@ Henter en liste over aktiviteter brukeren deltar på.
 ]
 ```
 
+### Søke etter aktiviteter
+
+Finner aktiviteter som matcher informasjonen i søket.
+
+**Endepunkt:** `/api/activity/search`
+
+**Metode:** POST
+
+**Headers:**
+
+- Content-Type: application/json
+- Authorization: Bearer JWT-token
+
+**Request Body:**
+
+```json
+{
+  "date": "2024-02-20T08:00:00",
+  "type": "Konsert",
+  "searchString": "Pitbull"
+}
+```
+
+**Respons:**
+
+- **200 OK**: Aktiviteter funnet
+- **400 BAD REQUEST**: Ugyldig søkedata
+- **401 UNAUTHORIZED**: Ugyldig autentisering
+
+```json
+
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "title": "Gruppetrening",
+    "dateTime": "2024-02-15T18:00:00",
+    "location": "Treningssenter",
+    "description": "Ukentlig gruppetrening",
+    "participants": [
+      {
+        "id": "987fcdeb-51d2-4af1-a2ec-87592f6f0000",
+        "brukernavn": "bruker123"
+      }
+    ]
+  }
+]
+```
+
 ## Datamodeller
 
 ### AuthDTO
@@ -259,7 +309,8 @@ Henter en liste over aktiviteter brukeren deltar på.
       "id": "UUID",
       "brukernavn": "string"
     }
-  ]
+  ],
+  "type": "string"
 }
 ```
 
@@ -269,6 +320,16 @@ Henter en liste over aktiviteter brukeren deltar på.
 {
   "id": "UUID",
   "brukernavn": "string"
+}
+```
+
+### SearchDTO
+
+```json
+{
+  "date" : "string (ISO-8601)",
+  "type" : "string",
+  "searchString" : "string"
 }
 ```
 
