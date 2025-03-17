@@ -41,3 +41,15 @@ For å utvikle AppEvent benytter vi følgende teknologier og rammeverk:
 2. Naviger til frontend-mappen.
 3. Sikre at alle avhengigheter er installert med `npm install`.
 4. Start React-serveren fra npn run dev i folderen "appevent-frontend"
+
+
+### Features
+
+- Kan opprette et event
+- Kan melde seg på arrangementer 
+- Kan søke på arrangementer
+- Kan opprette en profil
+- Kan legge til venner og invitere dem til arrangementer
+- Som admin kan du slette arragementer
+- Kan legge inn kommentarer på arragementer
+- Har oversikt over arrangementer man er påmeldt og arrangementer man har opprettet på profilsiden
