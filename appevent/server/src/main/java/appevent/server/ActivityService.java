@@ -77,7 +77,7 @@ public class ActivityService {
                    .anyMatch(participant -> participant.getId().equals(userId))
                    || activity.getInvitedUsers().stream()
                    .anyMatch(invitee -> invitee.getId().equals(userId));
-    }
+    }   
 
     /**
      * Converts an Activity entity to an ActivityDTO.
@@ -276,15 +276,16 @@ public class ActivityService {
      * @param search the search criteria
      * @return the list of activities matching the search criteria
      */
-    public List<ActivityDTO> searchActivities(final SearchDTO search) {
+    public List<ActivityDTO> searchActivities(final SearchDTO search, final UUID userId, final boolean isAdmin) {
         List<Activity> activities = activityRepository.findAll();
         List<ActivityDTO> foundActivities = activities
-            .stream()
-            .filter(a -> a.getTitle().toLowerCase().contains(search.searchString().toLowerCase()))
-            .filter(a -> a.getType().equals(search.type()))
-            .filter(a -> a.getDateTime().isAfter(search.date()))
-            .map(this::convertToActivityDTO)
-            .toList();
+                .stream()
+                .filter(a -> a.getTitle().toLowerCase().contains(search.searchString().toLowerCase()))
+                .filter(a -> a.getType().equals(search.type()))
+                .filter(a -> a.getDateTime().isAfter(search.date()))
+                .filter(a -> isActivityVisibleToUser(a, userId, isAdmin))
+                .map(this::convertToActivityDTO)
+                .toList();
         return foundActivities;
     }
 

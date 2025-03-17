@@ -397,7 +397,9 @@ public class ActivityController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {
-            List<ActivityDTO> activities = activityService.searchActivities(search);
+            String userId = JwtGenerator.getUserIdFromToken(token);
+        boolean isAdmin = JwtGenerator.validateAdminToken(token);
+        List<ActivityDTO> activities = activityService.searchActivities(search, UUID.fromString(userId), isAdmin);
             return ResponseEntity.ok(activities);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

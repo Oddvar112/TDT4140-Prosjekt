@@ -86,10 +86,6 @@ const CreateSearch = () => {
 
       await fetchMatchingEvents(searchData);
 
-      toast({
-        title: "Success",
-        description: `Arrangementer funnet.`,
-      });
 
     } catch (error) {
       toast({
