@@ -29,7 +29,7 @@ For å utvikle AppEvent benytter vi følgende teknologier og rammeverk:
 
 ### Oppstart av Server
 
-1. Åpne terminalen.
+1. Åpne terminalen på din pc.
 2. Naviger til rotmappen med kommandoen `cd appevent`.
 3. Kjør `mvn clean install` for å installere avhengigheter og bygge prosjektet.
 4. Gå til servermappen med `cd server`.
@@ -39,5 +39,5 @@ For å utvikle AppEvent benytter vi følgende teknologier og rammeverk:
 
 1. Åpne en ny terminal.
 2. Naviger til frontend-mappen.
-3. Sikre at alle avhengigheter er installert med `npm install`.
+3. Sikre at alle avhengigheter er installert med `npm install --force`.
 4. Start React-serveren fra npn run dev i folderen "appevent-frontend"
